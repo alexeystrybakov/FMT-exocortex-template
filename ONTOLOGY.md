@@ -1,6 +1,6 @@
 # Онтология IWE
 
-> Source-of-truth: `FMT-exocortex-template/ONTOLOGY.md`
+> Source-of-truth: `DS-exocortex/ONTOLOGY.md`
 > Pack-обоснование: [DP.IWE.001](https://github.com/TserenTserenov/PACK-digital-platform/blob/main/pack/digital-platform/02-domain-entities/DP.IWE.001-intelligent-working-environment.md)
 
 ## IWE (Intelligent Working Environment)
@@ -170,13 +170,13 @@ Governance-хаб для управления задачами и стратег
 
 | Переменная | Назначение | Когда |
 |------------|-----------|-------|
-| `{{GITHUB_USER}}` | GitHub username | setup.sh |
-| `{{WORKSPACE_DIR}}` | Рабочая директория | setup.sh |
-| `{{TIMEZONE_HOUR}}` | Час запуска стратега (UTC) | setup.sh |
-| `{{TIMEZONE_DESC}}` | Описание времени | setup.sh |
-| `{{CLAUDE_PATH}}` | Путь к Claude CLI | setup.sh |
-| `{{HOME_DIR}}` | Домашняя директория | setup.sh |
-| `{{CLAUDE_PROJECT_SLUG}}` | Slug проекта Claude | setup.sh |
+| `alexeystrybakov` | GitHub username | setup.sh |
+| `/home/alexey/IWE` | Рабочая директория | setup.sh |
+| `2` | Час запуска стратега (UTC) | setup.sh |
+| `7:00 MSK` | Описание времени | setup.sh |
+| `/home/alexey/.npm-global/bin/claude` | Путь к Claude CLI | setup.sh |
+| `/home/alexey` | Домашняя директория | setup.sh |
+| `-home-alexey-IWE` | Slug проекта Claude | setup.sh |
 
 Подставляются один раз при развёртывании (setup.sh) и далее не меняются.
 
@@ -184,10 +184,10 @@ Governance-хаб для управления задачами и стратег
 
 ```
 Авторская сторона (еженедельно):
-  Авторские репо → template-sync.sh → FMT-exocortex-template (GitHub)
+  Авторские репо → template-sync.sh → DS-exocortex (GitHub)
 
 Пользовательская сторона (по запросу):
-  FMT-exocortex-template → update.sh → git fetch upstream → merge
+  DS-exocortex → update.sh → git fetch upstream → merge
                                          ↓
                            CLAUDE.md → workspace root
                            memory/*.md → ~/.claude/projects/

@@ -1,27 +1,20 @@
 #!/bin/bash
-# Install Strategist Agent launchd jobs
-set -e
-
+# Install Strategist Agent via cron (Linux version)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-LAUNCHD_DIR="$SCRIPT_DIR/scripts/launchd"
-TARGET_DIR="$HOME/Library/LaunchAgents"
 
-echo "Installing Strategist Agent launchd jobs..."
+echo "Installing Strategist Agent cron jobs..."
 
-# Unload old agents if present
-launchctl unload "$TARGET_DIR/com.strategist.morning.plist" 2>/dev/null || true
-launchctl unload "$TARGET_DIR/com.strategist.weekreview.plist" 2>/dev/null || true
-
-# Copy new plist files
-cp "$LAUNCHD_DIR/com.strategist.morning.plist" "$TARGET_DIR/"
-cp "$LAUNCHD_DIR/com.strategist.weekreview.plist" "$TARGET_DIR/"
-
-# Make script executable
 chmod +x "$SCRIPT_DIR/scripts/strategist.sh"
 
-# Load agents
-launchctl load "$TARGET_DIR/com.strategist.morning.plist"
-launchctl load "$TARGET_DIR/com.strategist.weekreview.plist"
+# Remove old strategist jobs
+crontab -l 2>/dev/null | grep -v strategist | grep -v '^$' > /tmp/crontab_tmp || true
 
-echo "Done. Agents loaded:"
-launchctl list | grep strategist
+# Add new jobs
+echo "0 2 * * * $SCRIPT_DIR/scripts/strategist.sh morning >> $HOME/.claude/strategist.log 2>&1" >> /tmp/crontab_tmp
+echo "0 2 * * 0 $SCRIPT_DIR/scripts/strategist.sh weekreview >> $HOME/.claude/strategist.log 2>&1" >> /tmp/crontab_tmp
+
+crontab /tmp/crontab_tmp
+rm /tmp/crontab_tmp
+
+echo "Done. Cron jobs installed:"
+crontab -l | grep strategist

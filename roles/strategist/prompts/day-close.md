@@ -3,24 +3,24 @@
 > **Триггер:** Ручной — по запросу пользователя (`./scripts/strategist.sh day-close`).
 > Отдельный файл отчёта НЕ создаётся. Итоги дня войдут в DayPlan следующего утра.
 
-Источник сценария: {{WORKSPACE_DIR}}/CLAUDE.md → Протокол Day-Close
+Источник сценария: /home/alexey/IWE/CLAUDE.md → Протокол Day-Close
 
 ## Контекст
 
-- **WeekPlan:** {{WORKSPACE_DIR}}/DS-strategy/current/WeekPlan W*.md (последний по дате)
-- **MEMORY:** ~/.claude/projects/{{CLAUDE_PROJECT_SLUG}}/memory/MEMORY.md
-- **Exocortex backup:** {{WORKSPACE_DIR}}/DS-strategy/exocortex/
+- **WeekPlan:** /home/alexey/IWE/DS-strategy/current/WeekPlan W*.md (последний по дате)
+- **MEMORY:** ~/.claude/projects/-home-alexey-IWE/memory/MEMORY.md
+- **Exocortex backup:** /home/alexey/IWE/DS-strategy/exocortex/
 
 ## Алгоритм
 
 ### 1. Сбор коммитов за сегодня
 
 ```bash
-# Для КАЖДОГО репо в {{WORKSPACE_DIR}}/:
-git -C {{WORKSPACE_DIR}}/<repo> log --since="today 00:00" --oneline --no-merges
+# Для КАЖДОГО репо в /home/alexey/IWE/:
+git -C /home/alexey/IWE/<repo> log --since="today 00:00" --oneline --no-merges
 ```
 
-- Пройди по ВСЕМ репозиториям в `{{WORKSPACE_DIR}}/`
+- Пройди по ВСЕМ репозиториям в `/home/alexey/IWE/`
 - Сгруппируй коммиты по репозиториям
 - Сопоставь с РП из недельного плана
 - Определи статус каждого затронутого РП: done / partial / not started
@@ -44,15 +44,15 @@ git -C {{WORKSPACE_DIR}}/<repo> log --since="today 00:00" --oneline --no-merges
 
 ### 4. Backup экзокортекса
 
-Скопируй актуальные файлы в `{{WORKSPACE_DIR}}/DS-strategy/exocortex/`:
+Скопируй актуальные файлы в `/home/alexey/IWE/DS-strategy/exocortex/`:
 
 ```bash
 # Корневой CLAUDE.md
-cp {{WORKSPACE_DIR}}/CLAUDE.md {{WORKSPACE_DIR}}/DS-strategy/exocortex/CLAUDE.md
+cp /home/alexey/IWE/CLAUDE.md /home/alexey/IWE/DS-strategy/exocortex/CLAUDE.md
 
 # Memory (Слой 3)
-cp ~/.claude/projects/{{CLAUDE_PROJECT_SLUG}}/memory/MEMORY.md {{WORKSPACE_DIR}}/DS-strategy/exocortex/MEMORY.md
-cp ~/.claude/projects/{{CLAUDE_PROJECT_SLUG}}/memory/*.md {{WORKSPACE_DIR}}/DS-strategy/exocortex/
+cp ~/.claude/projects/-home-alexey-IWE/memory/MEMORY.md /home/alexey/IWE/DS-strategy/exocortex/MEMORY.md
+cp ~/.claude/projects/-home-alexey-IWE/memory/*.md /home/alexey/IWE/DS-strategy/exocortex/
 ```
 
 ### 5. Закоммитить
