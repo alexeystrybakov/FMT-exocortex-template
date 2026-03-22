@@ -1,0 +1,216 @@
+<svg viewBox="-130 -120 930 760" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    svg { background: #1a1a2e; }
+    .node rect { rx: 12; ry: 12; stroke-width: 2.5; }
+    .node-true rect { fill: #1a2e1a; stroke: #66bb6a; }
+    .node-false rect { fill: #2a1a1a; stroke: #ef5350; }
+    .node text { font-size: 14px; fill: #eee; font-family: 'Segoe UI', system-ui, sans-serif; }
+    .node .label-num { font-weight: bold; font-size: 13px; fill: #aaa; }
+    .arrow { fill: none; stroke-width: 2; }
+    .arrow-main { stroke: #4fc3f7; }
+    .arrow-branch-a { stroke: #81c784; }
+    .arrow-branch-b1 { stroke: #ffb74d; }
+    .arrow-branch-b2 { stroke: #ce93d8; }
+    .legend rect { rx: 4; ry: 4; }
+    .legend text { font-size: 12px; fill: #bbb; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#888"/>
+    </marker>
+    <marker id="arrow-main" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4fc3f7"/>
+    </marker>
+    <marker id="arrow-a" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#81c784"/>
+    </marker>
+    <marker id="arrow-b1" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ffb74d"/>
+    </marker>
+    <marker id="arrow-b2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ce93d8"/>
+    </marker>
+  </defs>
+
+  <!-- Achilles (runner figure) -->
+  <g transform="translate(80, -52) scale(0.5)">
+    <!-- Helmet -->
+    <path d="M 20,14 Q 20,0 30,0 Q 40,0 40,14" fill="#8b6914" stroke="#f0c040" stroke-width="2"/>
+    <!-- Helmet visor -->
+    <path d="M 20,14 L 40,14" stroke="#f0c040" stroke-width="2"/>
+    <!-- Helmet crest (plume) -->
+    <path d="M 30,0 Q 30,-12 20,-14 Q 30,-10 40,-14 Q 30,-12 30,0" fill="#c0392b" stroke="#a02020" stroke-width="1"/>
+    <!-- Face -->
+    <circle cx="30" cy="18" r="6" fill="none" stroke="#f0c040" stroke-width="2"/>
+    <!-- Body -->
+    <line x1="30" y1="22" x2="30" y2="48" stroke="#f0c040" stroke-width="2.5"/>
+    <!-- Arms (running pose) -->
+    <line x1="30" y1="30" x2="14" y2="24" stroke="#f0c040" stroke-width="2.5"/>
+    <line x1="30" y1="30" x2="46" y2="38" stroke="#f0c040" stroke-width="2.5"/>
+    <!-- Spear in back hand -->
+    <line x1="10" y1="14" x2="18" y2="28" stroke="#f0c040" stroke-width="1.5"/>
+    <!-- Legs (running stride) -->
+    <line x1="30" y1="48" x2="16" y2="64" stroke="#f0c040" stroke-width="2.5"/>
+    <line x1="16" y1="64" x2="10" y2="62" stroke="#f0c040" stroke-width="2.5"/>
+    <line x1="30" y1="48" x2="48" y2="58" stroke="#f0c040" stroke-width="2.5"/>
+    <line x1="48" y1="58" x2="54" y2="56" stroke="#f0c040" stroke-width="2.5"/>
+    <!-- Shield on arm -->
+    <ellipse cx="12" cy="22" rx="5" ry="7" fill="none" stroke="#f0c040" stroke-width="1.5"/>
+  </g>
+
+  <!-- Speech bubble -->
+  <g transform="translate(110, -90)">
+    <!-- Bubble body -->
+    <ellipse cx="75" cy="15" rx="80" ry="22" fill="white" stroke="#ccc" stroke-width="1.5"/>
+    <!-- Bubble tail (three circles pointing to Achilles) -->
+    <circle cx="8" cy="34" r="5" fill="white" stroke="#ccc" stroke-width="1"/>
+    <circle cx="0" cy="42" r="3" fill="white" stroke="#ccc" stroke-width="1"/>
+    <!-- Text -->
+    <text x="75" y="20" text-anchor="middle" font-size="10" fill="#222" font-family="Segoe UI, system-ui, sans-serif" font-weight="bold">Ну, черепаха, погоди!</text>
+  </g>
+
+  <!-- Turtle -->
+  <g transform="translate(620, -46) scale(0.5)">
+    <!-- Shell -->
+    <ellipse cx="30" cy="30" rx="24" ry="14" fill="#2a5e3a" stroke="#66bb6a" stroke-width="2.5"/>
+    <!-- Shell pattern -->
+    <path d="M 16,24 Q 30,18 44,24" fill="none" stroke="#66bb6a" stroke-width="1.2"/>
+    <path d="M 12,30 L 48,30" fill="none" stroke="#66bb6a" stroke-width="1"/>
+    <line x1="24" y1="18" x2="22" y2="42" stroke="#66bb6a" stroke-width="1"/>
+    <line x1="36" y1="18" x2="38" y2="42" stroke="#66bb6a" stroke-width="1"/>
+    <!-- Head -->
+    <circle cx="56" cy="30" r="6" fill="none" stroke="#66bb6a" stroke-width="2"/>
+    <!-- Eye -->
+    <circle cx="58" cy="28" r="1.2" fill="#66bb6a"/>
+    <!-- Legs -->
+    <line x1="18" y1="40" x2="14" y2="50" stroke="#66bb6a" stroke-width="2.5"/>
+    <line x1="42" y1="40" x2="46" y2="50" stroke="#66bb6a" stroke-width="2.5"/>
+    <line x1="18" y1="22" x2="14" y2="16" stroke="#66bb6a" stroke-width="2"/>
+    <line x1="42" y1="22" x2="46" y2="16" stroke="#66bb6a" stroke-width="2"/>
+    <!-- Tail -->
+    <path d="M 6,32 Q 2,28 6,26" fill="none" stroke="#66bb6a" stroke-width="1.5"/>
+    <!-- Flag pole -->
+    <line x1="30" y1="16" x2="30" y2="-35" stroke="#ccc" stroke-width="2.2"/>
+    <!-- Flag -->
+    <rect x="-130" y="-42" width="160" height="40" fill="#f57c00" rx="3" ry="3"/>
+    <text x="-50" y="-16" text-anchor="middle" font-size="20" fill="#fff" font-family="Segoe UI, system-ui, sans-serif" font-weight="bold">Победитель?</text>
+  </g>
+
+  <!-- Title -->
+  <text x="370" y="-25" text-anchor="middle" font-size="20" fill="#eee" font-family="Segoe UI, system-ui, sans-serif" font-weight="bold">Размышления об апории «Зенон и черепаха»</text>
+
+
+  <!-- ===== NODES ===== -->
+
+  <!-- (1) Бытие движимо — истинно -->
+  <g class="node node-true" transform="translate(40, 80)">
+    <rect width="220" height="56"/>
+    <text class="label-num" x="15" y="22">(1)</text>
+    <text x="15" y="42">Бытие движимо — истинно</text>
+  </g>
+
+  <!-- (2) Бытие делимо — истинно -->
+  <g class="node node-true" transform="translate(40, 230)">
+    <rect width="220" height="56"/>
+    <text class="label-num" x="15" y="22">(2)</text>
+    <text x="15" y="42">Бытие делимо — истинно</text>
+  </g>
+
+  <!-- (3) Бытие недвижимо — истинно -->
+  <g class="node node-true" transform="translate(40, 380)">
+    <rect width="230" height="56"/>
+    <text class="label-num" x="15" y="22">(3)</text>
+    <text x="15" y="42">Бытие недвижимо — истинно</text>
+  </g>
+
+  <!-- (4) Бытие движимо — ложно -->
+  <g class="node node-false" transform="translate(460, 80)">
+    <rect width="220" height="56"/>
+    <text class="label-num" x="15" y="22">(4)</text>
+    <text x="15" y="42">Бытие движимо — ложно</text>
+  </g>
+
+  <!-- (5) Бытие делимо — ложно -->
+  <g class="node node-false" transform="translate(460, 230)">
+    <rect width="220" height="56"/>
+    <text class="label-num" x="15" y="22">(5)</text>
+    <text x="15" y="42">Бытие делимо — ложно</text>
+  </g>
+
+  <!-- (6) Бытие недвижимо — ложно -->
+  <g class="node node-false" transform="translate(460, 380)">
+    <rect width="230" height="56"/>
+    <text class="label-num" x="15" y="22">(6)</text>
+    <text x="15" y="42">Бытие недвижимо — ложно</text>
+  </g>
+
+  <!-- ===== MAIN CHAIN ARROWS (blue) ===== -->
+
+  <!-- (1) → (2) -->
+  <path class="arrow arrow-main" marker-end="url(#arrow-main)"
+        d="M 150,136 L 150,225"/>
+  <text x="35" y="105" text-anchor="end" font-size="11" fill="#ccc" font-family="Segoe UI, system-ui, sans-serif" font-style="italic">Мысль на</text>
+  <text x="35" y="119" text-anchor="end" font-size="11" fill="#ccc" font-family="Segoe UI, system-ui, sans-serif" font-style="italic">основании опыта</text>
+
+  <!-- Label left of (2) -->
+  <text x="35" y="237" text-anchor="end" font-size="11" fill="#ccc" font-family="Segoe UI, system-ui, sans-serif" font-style="italic">Парменид: бытие</text>
+  <text x="35" y="251" text-anchor="end" font-size="11" fill="#ccc" font-family="Segoe UI, system-ui, sans-serif" font-style="italic">неделимо - истинно.</text>
+  <text x="35" y="267" text-anchor="end" font-size="11" fill="#ccc" font-family="Segoe UI, system-ui, sans-serif" font-style="italic">Зенон: предположим,</text>
+  <text x="35" y="281" text-anchor="end" font-size="11" fill="#ccc" font-family="Segoe UI, system-ui, sans-serif" font-style="italic">бытие неделимо - ложно.</text>
+
+  <!-- (2) → (3) -->
+  <path class="arrow arrow-main" marker-end="url(#arrow-main)"
+        d="M 150,286 L 150,375"/>
+
+  <!-- (3) → (4) -->
+  <path class="arrow arrow-main" marker-end="url(#arrow-main)"
+        d="M 270,398 L 370,398 L 370,98 L 455,98"/>
+
+  <!-- ===== BRANCH A: (4)→(2)→(3) green ===== -->
+
+  <!-- (4) → (2) branch A -->
+  <path class="arrow arrow-branch-a" marker-end="url(#arrow-a)"
+        d="M 460,120 L 310,120 L 310,258 L 265,258"/>
+
+  <!-- (2) → (3) already shown via main chain, add label -->
+
+  <!-- ===== BRANCH B: (4)→(5) orange ===== -->
+
+  <!-- (4) → (5) -->
+  <path class="arrow arrow-branch-a" marker-end="url(#arrow-a)"
+        d="M 570,136 L 570,225"/>
+
+  <!-- ===== BRANCH B1: (5)→(3)→(4) orange ===== -->
+
+  <!-- (5) → (3) -->
+  <path class="arrow arrow-branch-b1" marker-end="url(#arrow-b1)"
+        d="M 460,268 L 330,268 L 330,420 L 275,420"/>
+
+  <!-- (3) → (4) already drawn -->
+
+  <!-- ===== BRANCH B2: (5)→(6)→(1) purple ===== -->
+
+  <!-- (5) → (6) -->
+  <path class="arrow arrow-branch-b1" marker-end="url(#arrow-b1)"
+        d="M 570,286 L 570,375"/>
+
+  <!-- (6) → (1) -->
+  <path class="arrow arrow-branch-b2" marker-end="url(#arrow-b2)"
+        d="M 690,408 L 750,408 L 750,40 L 150,40 L 150,75"/>
+
+
+  <!-- ===== LEGEND ===== -->
+  <g class="legend" transform="translate(30, 490)">
+    <rect x="0" y="0" width="16" height="16" fill="#1a2e1a" stroke="#66bb6a" stroke-width="2" rx="4"/>
+    <text x="24" y="14">Истинно</text>
+    <rect x="100" y="0" width="16" height="16" fill="#2a1a1a" stroke="#ef5350" stroke-width="2" rx="4"/>
+    <text x="124" y="14">Ложно</text>
+
+    <text x="0" y="46" font-size="13" fill="#ccc" font-weight="bold">Закон импликации (A → B):</text>
+    <text x="0" y="66" font-size="12" fill="#bbb">• A истинно → B истинно</text>
+    <text x="0" y="86" font-size="12" fill="#bbb">• A ложно приводит к неоднозначности:</text>
+    <text x="20" y="104" font-size="12" fill="#bbb">• A ложно → B истинно</text>
+    <text x="20" y="122" font-size="12" fill="#bbb">• A ложно → B ложно</text>
+  </g>
+
+</svg>
