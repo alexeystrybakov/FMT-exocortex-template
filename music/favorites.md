@@ -4,14 +4,20 @@
 
 | Обложка | Исполнитель | Альбом | Год | Жанр |
 |---------|-------------|--------|-----|------|
+| ![cover](covers/afi-decemberunderground.jpg) | AFI | Decemberunderground | 2006 | Alternative rock, post-punk |
+| ![cover](covers/afi-sing-the-sorrow.jpg) | AFI | Sing the Sorrow | 2003 | Post-hardcore, gothic rock |
 | ![cover](covers/the-ataris-so-long-astoria.jpg) | Ataris, The | So Long, Astoria | 2003 | Pop punk |
 | ![cover](covers/the-ataris-welcome-the-night.jpg) | Ataris, The | Welcome the Night | 2007 | Alternative rock |
 | ![cover](covers/the-cure-bloodflowers.jpg) | Cure, The | Bloodflowers | 2000 | Alternative rock, gothic rock |
+| ![cover](covers/deadkedy-ganesha.jpg) | DeadKedы | Ganeша | 2007 | Alternative rock, emocore |
+| ![cover](covers/deadkedy-chuzhoe-nebo.jpg) | DeadKedы | Чужое Небо | 2004 | Alternative rock |
 | ![cover](covers/deafheaven-infinite-granite.jpg) | Deafheaven | Infinite Granite | 2021 | Shoegaze, dream pop |
+| ![cover](covers/dolphin-sushchestvo.jpg) | Dolphin (Дельфин) | Существо | 2011 | Alternative, electronic |
 | ![cover](covers/nick-drake-bryter-layter.jpg) | Drake, Nick | Bryter Layter | 1971 | Folk, singer-songwriter |
 | ![cover](covers/gun-gallus.jpg) | Gun | Gallus | 1992 | Hard rock |
 | ![cover](covers/gun-taking-on-the-world.jpg) | Gun | Taking on the World | 1989 | Hard rock |
 | ![cover](covers/hum-inlet.jpg) | Hum | Inlet | 2020 | Shoegaze, alternative metal |
+| ![cover](covers/mcr-the-black-parade.jpg) | My Chemical Romance | The Black Parade | 2006 | Alternative rock, post-hardcore |
 | ![cover](covers/pink-floyd-the-division-bell.jpg) | Pink Floyd | The Division Bell | 1994 | Progressive rock |
 | ![cover](covers/pink-floyd-the-final-cut.jpg) | Pink Floyd | The Final Cut | 1983 | Progressive rock |
 | ![cover](covers/stigmata-osnovano.jpg) | Stigmata | Основано на реальных событиях | 2012 | Nu-metal, metalcore |
