@@ -18,6 +18,8 @@
 | Обложка | Название | Автор | Год | ISBN | Дата прочтения | Краткое впечатление |
 |---------|----------|-------|-----|------|----------------|---------------------|
 | ![cover](covers/conrad-heart-of-darkness.jpg) | Сердце тьмы (Heart of Darkness) | Джозеф Конрад | 1899 | — | 2024 осень | |
+| ![cover](covers/kazantzakis-last-temptation.jpg) | Последнее искушение Христа (Ο Τελευταίος Πειρασμός) | Никос Казандзакис | 1951 | — | 2025-09 | |
+| ![cover](covers/klinger-faust.jpg) | Fausts Leben, Taten und Höllenfahrt | Friedrich Maximilian Klinger | 1791 | — | — | |
 | ![cover](covers/kast-intuition.png) | Wie der Bauch dem Kopf beim Denken hilft. Die Kraft der Intuition | Bas Kast | 2009 | 978-3-596-17451-5 | 2026-01 | |
 
 ## Брошено

@@ -9,6 +9,8 @@
 | ![cover](covers/the-cure-bloodflowers.jpg) | Cure, The | Bloodflowers | 2000 | Alternative rock, gothic rock |
 | ![cover](covers/deafheaven-infinite-granite.jpg) | Deafheaven | Infinite Granite | 2021 | Shoegaze, dream pop |
 | ![cover](covers/nick-drake-bryter-layter.jpg) | Drake, Nick | Bryter Layter | 1971 | Folk, singer-songwriter |
+| ![cover](covers/gun-gallus.jpg) | Gun | Gallus | 1992 | Hard rock |
+| ![cover](covers/gun-taking-on-the-world.jpg) | Gun | Taking on the World | 1989 | Hard rock |
 | ![cover](covers/hum-inlet.jpg) | Hum | Inlet | 2020 | Shoegaze, alternative metal |
 | ![cover](covers/pink-floyd-the-division-bell.jpg) | Pink Floyd | The Division Bell | 1994 | Progressive rock |
 | ![cover](covers/pink-floyd-the-final-cut.jpg) | Pink Floyd | The Final Cut | 1983 | Progressive rock |
