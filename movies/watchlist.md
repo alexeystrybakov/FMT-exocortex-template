@@ -10,6 +10,7 @@
 
 | Обложка | Название | Режиссёр | Год | Жанр | Краткое впечатление |
 |---------|----------|----------|-----|------|---------------------|
+| ![poster](covers/exterminating-angel.jpg) | Ангел-истребитель (El ángel exterminador) | Луис Бунюэль | 1962 | Драма, сюрреализм | |
 | ![poster](covers/aniara.jpg) | Аниара (Aniara) | Пелла Когерман, Хюго Лиа | 2018 | Sci-fi, драма | |
 | ![poster](covers/apocalypse-now.jpg) | Апокалипсис сегодня (Apocalypse Now) | Фрэнсис Форд Коппола | 1979 | Драма, военный | |
 | ![poster](covers/blade-runner.jpg) | Бегущий по лезвию (Blade Runner) | Ридли Скотт | 1982 | Sci-fi, нуар | |
@@ -45,6 +46,7 @@
 | ![poster](covers/revolver.jpg) | Револьвер (Revolver) | Гай Ричи | 2005 | Триллер, криминал | |
 | ![poster](covers/se7en.jpg) | Семь (Se7en) | Дэвид Финчер | 1995 | Триллер, криминал | |
 | ![poster](covers/stalker.jpg) | Сталкер (Stalker) | Андрей Тарковский | 1979 | Sci-fi, драма | |
+| ![poster](covers/automata.jpg) | Страховщик (Autómata) | Габе Ибаньес | 2014 | Sci-fi, триллер | |
 | ![poster](covers/the-wall.jpg) | Стена (Pink Floyd: The Wall) | Алан Паркер | 1982 | Драма, музыкальный | |
 | ![poster](covers/dark-city.jpg) | Тёмный город (Dark City) | Алекс Пройас | 1998 | Sci-fi, нуар | |
 | ![poster](covers/tot-samyy-myunkhgauzen.jpg) | Тот самый Мюнхгаузен | Марк Захаров | 1979 | Комедия, фэнтези | |
