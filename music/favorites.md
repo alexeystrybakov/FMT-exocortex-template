@@ -7,6 +7,7 @@
 | ![cover](covers/7rasa-illyuziya-maya.jpg) | 7раса | Иллюзия: Майя | 2006 | Alternative rock |
 | ![cover](covers/afi-decemberunderground.jpg) | AFI | Decemberunderground | 2006 | Alternative rock, post-punk |
 | ![cover](covers/afi-sing-the-sorrow.jpg) | AFI | Sing the Sorrow | 2003 | Post-hardcore, gothic rock |
+| ![cover](covers/altered-state-dos.jpg) | Altered State | :[dos]: | 1993 | Alternative rock |
 | ![cover](covers/the-ataris-so-long-astoria.jpg) | Ataris, The | So Long, Astoria | 2003 | Pop punk |
 | ![cover](covers/the-ataris-welcome-the-night.jpg) | Ataris, The | Welcome the Night | 2007 | Alternative rock |
 | ![cover](covers/the-cure-bloodflowers.jpg) | Cure, The | Bloodflowers | 2000 | Alternative rock, gothic rock |
