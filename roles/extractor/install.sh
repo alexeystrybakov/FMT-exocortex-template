@@ -1,35 +1,27 @@
 #!/bin/bash
-# Extractor: установка launchd-агента для inbox-check
-# Запускает inbox-check каждые 3 часа
-set -e
-
+# Extractor: установка cron-задачи для inbox-check (Linux version)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PLIST_SRC="$SCRIPT_DIR/scripts/launchd/com.extractor.inbox-check.plist"
-PLIST_DST="$HOME/Library/LaunchAgents/com.extractor.inbox-check.plist"
 
-echo "Installing Extractor launchd agent..."
+echo "Installing Extractor cron job..."
 
-# Проверяем что plist существует
-if [ ! -f "$PLIST_SRC" ]; then
-    echo "ERROR: $PLIST_SRC not found"
+if [ ! -f "$SCRIPT_DIR/scripts/extractor.sh" ]; then
+    echo "ERROR: $SCRIPT_DIR/scripts/extractor.sh not found"
     exit 1
 fi
 
-# Делаем скрипт исполняемым
 chmod +x "$SCRIPT_DIR/scripts/extractor.sh"
 
-# Выгружаем старый агент (если есть)
-launchctl unload "$PLIST_DST" 2>/dev/null || true
+# Удаляем старые задачи
+crontab -l 2>/dev/null | grep -v extractor | grep -v '^$' > /tmp/crontab_tmp || true
 
-# Копируем plist
-cp "$PLIST_SRC" "$PLIST_DST"
+# Каждые 3 часа
+echo "0 */3 * * * $SCRIPT_DIR/scripts/extractor.sh >> $HOME/.claude/extractor.log 2>&1" >> /tmp/crontab_tmp
 
-# Загружаем агент
-launchctl load "$PLIST_DST"
+crontab /tmp/crontab_tmp
+rm /tmp/crontab_tmp
 
-echo "  ✓ Installed: com.extractor.inbox-check"
+echo "  ✓ Installed: extractor cron job"
 echo "  ✓ Interval: every 3 hours"
-echo "  ✓ Logs: ~/logs/extractor/"
+echo "  ✓ Logs: $HOME/.claude/extractor.log"
 echo ""
-echo "Verify: launchctl list | grep extractor"
-echo "Uninstall: launchctl unload $PLIST_DST && rm $PLIST_DST"
+echo "Verify: crontab -l | grep extractor"
