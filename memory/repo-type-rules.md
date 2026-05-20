@@ -1,5 +1,20 @@
+---
+valid_from: 2026-04-09
+originSessionId: 9a0e726a-951e-4408-9e02-94d7eeffbf74
+
+type: reference
+horizon: warm
+domains: [reference]
+status: active
+owner: user
+schema_version: 1
+
+name: "repo-type-rules"
+description: "Операционный файл памяти IWE"
+---
 # Правила работы по типам репозиториев
 
+> **Source-of-truth полной маршрутизации:** `PACK-digital-platform/02-domain-entities/DP.KR.001-knowledge-routing.md`
 > Реестр репо: `DS-ecosystem-development/0.OPS/REPOSITORY-REGISTRY.md`
 
 ## 3 типа репозиториев
@@ -26,7 +41,7 @@
 
 ### Base/Форматы (FMT-*)
 
-**Содержит:** Протоколы структуры репо (DS-exocortex, FMT-s2r).
+**Содержит:** Протоколы структуры репо (FMT-exocortex-template, FMT-s2r).
 
 **Можно:** Уточнять спецификацию формата, добавлять примеры.
 
@@ -68,7 +83,7 @@
 Конвенция: `DS-{slug}` (примеры: `DS-strategist-agent`, `DS-extractor-agent`).
 Привязка к Pack через `source-of-truth: {ID}` в CLAUDE.md репо, не через имя.
 
-### DS/governance: DS-my-strategy (личная база данных)
+### DS/governance: DS-strategy (личная база данных)
 
 **Содержит:** Планы недели, заметки (inbox/), контексты РП, extraction reports, онтологию.
 
@@ -82,7 +97,8 @@
 
 **Правило:** Формализованное знание домена НЕ хранится здесь постоянно — только транзитом через KE.
 
----
+**0.9.Inbox:** только материалы к обсуждению с командой (повестки, предложения, вопросы). НЕ хранить WP-context файлы — они в DS-strategy/inbox/. Подробно: DP.KR.001 §5.3.
+
 
 ## Repository-first режим
 
@@ -94,7 +110,6 @@
 
 Если контекст не найден → скажи "в репозитории нет источника", предложи создать документ.
 
----
 
 ## Context Pack (формат)
 
@@ -108,15 +123,12 @@
 - Документ X — не релевантен, т.к. ...
 ```
 
----
 
 ## Frontmatter (базовый)
 
 ```yaml
----
 type: doc    # doc, spec, process, report
 status: draft # draft, active, archived
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
----
 ```

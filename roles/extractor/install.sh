@@ -1,27 +1,64 @@
 #!/bin/bash
-# Extractor: установка cron-задачи для inbox-check (Linux version)
+# Extractor: установка launchd-агента для inbox-check
+# Запускает inbox-check каждые 3 часа.
+# WP-273 Этап 2: plist берётся из $IWE_RUNTIME (Generated runtime, F).
+set -e
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROLE_NAME="$(basename "$SCRIPT_DIR")"
+PLIST_DST="$HOME/Library/LaunchAgents/com.extractor.inbox-check.plist"
 
-echo "Installing Extractor cron job..."
+# Resolve PLIST source (Generated runtime → workspace fallback → FMT legacy)
+if [ -n "${IWE_RUNTIME:-}" ] && [ -d "$IWE_RUNTIME/roles/$ROLE_NAME/scripts/launchd" ]; then
+    PLIST_SRC="$IWE_RUNTIME/roles/$ROLE_NAME/scripts/launchd/com.extractor.inbox-check.plist"
+    SCRIPT_TARGET="$IWE_RUNTIME/roles/$ROLE_NAME/scripts/extractor.sh"
+elif [ -n "${IWE_WORKSPACE:-}" ] && [ -d "$IWE_WORKSPACE/.iwe-runtime/roles/$ROLE_NAME/scripts/launchd" ]; then
+    PLIST_SRC="$IWE_WORKSPACE/.iwe-runtime/roles/$ROLE_NAME/scripts/launchd/com.extractor.inbox-check.plist"
+    SCRIPT_TARGET="$IWE_WORKSPACE/.iwe-runtime/roles/$ROLE_NAME/scripts/extractor.sh"
+else
+    PLIST_SRC="$SCRIPT_DIR/scripts/launchd/com.extractor.inbox-check.plist"
+    SCRIPT_TARGET="$SCRIPT_DIR/scripts/extractor.sh"
+    echo "  ⚠ Legacy mode: используются плейсхолдеры из FMT-substituted (запустите setup.sh ≥0.29.0 для архитектуры F)"
+fi
 
-if [ ! -f "$SCRIPT_DIR/scripts/extractor.sh" ]; then
-    echo "ERROR: $SCRIPT_DIR/scripts/extractor.sh not found"
+echo "Installing Extractor launchd agent..."
+echo "  PLIST_SRC: $PLIST_SRC"
+
+# Проверяем что plist существует
+if [ ! -f "$PLIST_SRC" ]; then
+    echo "ERROR: $PLIST_SRC not found"
     exit 1
 fi
 
-chmod +x "$SCRIPT_DIR/scripts/extractor.sh"
+# WP-273 R5 fix: fail-fast если plist содержит literal {{...}}
+if grep -qE '\{\{[A-Z_]+\}\}' "$PLIST_SRC" 2>/dev/null; then
+    echo "ERROR: $PLIST_SRC содержит незаменённые плейсхолдеры:" >&2
+    grep -oE '\{\{[A-Z_]+\}\}' "$PLIST_SRC" | sort -u | sed 's/^/  /' >&2
+    echo "" >&2
+    echo "Возможные причины:" >&2
+    echo "  1. IWE_RUNTIME не экспортирован → 'source ~/.zshenv' или 'source ~/.iwe-paths'" >&2
+    echo "  2. .iwe-runtime/ ещё не создан → 'bash \$IWE_TEMPLATE/setup/build-runtime.sh'" >&2
+    echo "  3. Старый clone до WP-273 Этап 2 → 'bash \$IWE_TEMPLATE/scripts/migrate-to-runtime-target.sh'" >&2
+    exit 2
+fi
 
-# Удаляем старые задачи
-crontab -l 2>/dev/null | grep -v extractor | grep -v '^$' > /tmp/crontab_tmp || true
+# Делаем скрипт исполняемым (runtime path)
+if [ -f "$SCRIPT_TARGET" ]; then
+    chmod +x "$SCRIPT_TARGET"
+fi
 
-# Каждые 3 часа
-echo "0 */3 * * * $SCRIPT_DIR/scripts/extractor.sh >> $HOME/.claude/extractor.log 2>&1" >> /tmp/crontab_tmp
+# Выгружаем старый агент (если есть)
+launchctl unload "$PLIST_DST" 2>/dev/null || true
 
-crontab /tmp/crontab_tmp
-rm /tmp/crontab_tmp
+# Копируем plist
+cp "$PLIST_SRC" "$PLIST_DST"
 
-echo "  ✓ Installed: extractor cron job"
+# Загружаем агент
+launchctl load "$PLIST_DST"
+
+echo "  ✓ Installed: com.extractor.inbox-check"
 echo "  ✓ Interval: every 3 hours"
-echo "  ✓ Logs: $HOME/.claude/extractor.log"
+echo "  ✓ Logs: ~/logs/extractor/"
 echo ""
-echo "Verify: crontab -l | grep extractor"
+echo "Verify: launchctl list | grep extractor"
+echo "Uninstall: launchctl unload $PLIST_DST && rm $PLIST_DST"

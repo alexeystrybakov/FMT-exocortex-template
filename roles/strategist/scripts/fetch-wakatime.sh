@@ -1,10 +1,19 @@
 #!/bin/bash
 # Fetch WakaTime stats for Strategist prompts
 # Usage: fetch-wakatime.sh <mode>
-#   mode: "day"  — yesterday's summary (for day-plan)
-#         "week" — current + previous week (for week-review)
+#   mode: "today" — today's summary, all projects (for day-close)
+#         "day"   — yesterday's summary (for day-plan)
+#         "week"  — current + previous week (for week-review)
 
 set -e
+
+# Cross-platform date offset: portable_date_offset <days_back> <format>
+# Works on macOS and GNU/Linux
+portable_date_offset() {
+    local days="$1"
+    local fmt="${2:-%Y-%m-%d}"
+    date -v-${days}d +"$fmt" 2>/dev/null || date -d "$days days ago" +"$fmt" 2>/dev/null
+}
 
 ENV_FILE="$HOME/.config/aist/env"
 if [ -f "$ENV_FILE" ]; then
@@ -56,9 +65,37 @@ else:
 mode="${1:-day}"
 
 case "$mode" in
+    "today")
+        # Today's summary (all projects)
+        TODAY=$(date +%Y-%m-%d)
+        RESPONSE=$(waka_fetch "$API/summaries?start=$TODAY&end=$TODAY")
+
+        TOTAL=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['cumulative_total']['text'])" 2>/dev/null || echo "н/д")
+        PROJECTS_JSON=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); json.dump(d['data'][0].get('projects',[]), sys.stdout)" 2>/dev/null || echo "[]")
+        LANGS_JSON=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); json.dump(d['data'][0].get('languages',[]), sys.stdout)" 2>/dev/null || echo "[]")
+
+        cat <<EOF
+## WakaTime: сегодня ($TODAY)
+
+**Общее время (все проекты):** $TOTAL
+
+**По проектам:**
+
+| Проект | Время |
+|--------|-------|
+$(echo "$PROJECTS_JSON" | format_projects)
+
+**По языкам:**
+
+| Язык | Время |
+|------|-------|
+$(echo "$LANGS_JSON" | format_languages)
+EOF
+        ;;
+
     "day")
         # Yesterday's summary
-        YESTERDAY=$(date -v-1d +%Y-%m-%d)
+        YESTERDAY=$(portable_date_offset 1)
         RESPONSE=$(waka_fetch "$API/summaries?start=$YESTERDAY&end=$YESTERDAY")
 
         TOTAL=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['cumulative_total']['text'])" 2>/dev/null || echo "н/д")
@@ -89,12 +126,12 @@ EOF
         # Current week
         DOW=$(date +%u)  # 1=Mon
         DAYS_SINCE_MON=$((DOW - 1))
-        MON_THIS=$(date -v-${DAYS_SINCE_MON}d +%Y-%m-%d)
+        MON_THIS=$(portable_date_offset $DAYS_SINCE_MON)
         TODAY=$(date +%Y-%m-%d)
 
         # Previous week
-        MON_PREV=$(date -v-$((DAYS_SINCE_MON + 7))d +%Y-%m-%d)
-        SUN_PREV=$(date -v-$((DAYS_SINCE_MON + 1))d +%Y-%m-%d)
+        MON_PREV=$(portable_date_offset $((DAYS_SINCE_MON + 7)))
+        SUN_PREV=$(portable_date_offset $((DAYS_SINCE_MON + 1)))
 
         RESP_THIS=$(waka_fetch "$API/summaries?start=$MON_THIS&end=$TODAY")
         RESP_PREV=$(waka_fetch "$API/summaries?start=$MON_PREV&end=$SUN_PREV")
@@ -173,7 +210,7 @@ EOF
         ;;
 
     *)
-        echo "Usage: $0 {day|week}"
+        echo "Usage: $0 {today|day|week}"
         exit 1
         ;;
 esac

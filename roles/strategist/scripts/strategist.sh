@@ -4,21 +4,69 @@
 
 set -e
 
+# Предотвращаем сон: -i (idle, работает на батарее) -d (display) -u (user activity)
+# Флаг -s (system sleep) не используем — он НЕ работает на батарее (OBC может переключить профиль)
+# Linux: caffeinate отсутствует — guard через command -v (на Linux достаточно, что cron/systemd сам управляет sleep)
+command -v caffeinate >/dev/null 2>&1 && caffeinate -diu -w $$ &
+
 # Конфигурация
+# WP-273 R5 fix (Round 5 Евгения): substituted runner живёт в .iwe-runtime/,
+# но prompts/ и notify.sh — read-only данные, должны браться из FMT (immutable upstream).
+# Архитектурный принцип: substituted в runtime, read-only из FMT через $IWE_TEMPLATE.
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
-WORKSPACE="/home/alexey/IWE/DS-strategy"
-PROMPTS_DIR="$REPO_DIR/prompts"
-LOG_DIR="$HOME/logs/strategist"
-CLAUDE_PATH="/home/alexey/.npm-global/bin/claude"
+# WP-273 0.29.4 R6.1 fix: было хардкоженое имя governance-репо.
+# На Mac: build-runtime подставляет плейсхолдеры в .iwe-runtime/strategist.sh.
+# На сервере (без build-runtime): резолвится через env vars с fallback.
+# IWE_WORKSPACE / IWE_GOVERNANCE_REPO задаются в /etc/iwe/env или ~/.config/aist/env.
+WORKSPACE="${IWE_WORKSPACE:-$HOME/IWE}/${IWE_GOVERNANCE_REPO:-DS-strategy}"
 
-# AI CLI: переопределение через переменные окружения
-# По умолчанию: Claude Code. Примеры:
-#   AI_CLI=codex AI_CLI_PROMPT_FLAG=--prompt bash strategist.sh morning
-#   AI_CLI=aider AI_CLI_PROMPT_FLAG=--message AI_CLI_EXTRA_FLAGS="" bash strategist.sh morning
-AI_CLI="${AI_CLI:-$CLAUDE_PATH}"
-AI_CLI_PROMPT_FLAG="${AI_CLI_PROMPT_FLAG:--p}"
-AI_CLI_EXTRA_FLAGS="${AI_CLI_EXTRA_FLAGS:---dangerously-skip-permissions --allowedTools Read,Write,Edit,Glob,Grep,Bash}"
+# PROMPTS_DIR резолв: $IWE_TEMPLATE (Generated runtime) → $HOME/IWE/FMT-exocortex-template (default) → relative (legacy fallback)
+if [ -n "${IWE_TEMPLATE:-}" ] && [ -d "$IWE_TEMPLATE/roles/strategist/prompts" ]; then
+    PROMPTS_DIR="$IWE_TEMPLATE/roles/strategist/prompts"
+elif [ -d "$HOME/IWE/FMT-exocortex-template/roles/strategist/prompts" ]; then
+    PROMPTS_DIR="$HOME/IWE/FMT-exocortex-template/roles/strategist/prompts"
+    # WP-273 0.29.3 (sub-agent assessment R3): silent degradation guard.
+    # Если IWE_TEMPLATE не экспортирована — env неполная, дальше будут проблемы.
+    echo "[$(date '+%H:%M:%S')] WARN: \$IWE_TEMPLATE не задана, fallback на $HOME/IWE/FMT-exocortex-template. source ~/.zshenv?" >&2
+else
+    PROMPTS_DIR="$REPO_DIR/prompts"  # legacy: same dir as runner (pre-WP-273)
+    echo "[$(date '+%H:%M:%S')] WARN: legacy PROMPTS_DIR fallback на $PROMPTS_DIR (pre-WP-273). Запустите migrate-to-runtime-target.sh." >&2
+fi
+
+LOG_DIR="$HOME/logs/strategist"
+# На Mac: build-runtime подставляет {{CLAUDE_PATH}}. На сервере — резолв через env/PATH/known paths.
+if [ -n "${CLAUDE_CLI_PATH:-}" ]; then
+    CLAUDE_PATH="$CLAUDE_CLI_PATH"
+elif command -v claude &>/dev/null; then
+    CLAUDE_PATH="$(command -v claude)"
+elif [ -x "$HOME/.npm-global/bin/claude" ]; then
+    CLAUDE_PATH="$HOME/.npm-global/bin/claude"
+else
+    CLAUDE_PATH="{{CLAUDE_PATH}}"  # fallback: build-runtime должен был подставить
+fi
+CLAUDE_TIMEOUT=1800  # 30 мин — защита от зависания Claude CLI
+
+# macOS не имеет GNU timeout — используем perl fallback
+if ! command -v timeout &>/dev/null; then
+    timeout() {
+        local duration="$1"; shift
+        perl -e '
+            use POSIX ":sys_wait_h";
+            my $timeout = shift @ARGV;
+            my $pid = fork();
+            if ($pid == 0) { exec @ARGV; die "exec failed: $!"; }
+            eval {
+                local $SIG{ALRM} = sub { kill "TERM", $pid; die "timeout\n"; };
+                alarm $timeout;
+                waitpid($pid, 0);
+                alarm 0;
+            };
+            if ($@ && $@ eq "timeout\n") { waitpid($pid, WNOHANG); exit 124; }
+            exit ($? >> 8);
+        ' "$duration" "$@"
+    }
+fi
 
 # Создаём папку для логов
 mkdir -p "$LOG_DIR"
@@ -43,21 +91,23 @@ notify() {
 
 notify_telegram() {
     local scenario="$1"
-    "/home/alexey/IWE/DS-exocortex/roles/synchronizer/scripts/notify.sh" strategist "$scenario" >> "$LOG_FILE" 2>&1 || true
-}
-
-fetch_wakatime_data() {
-    local mode="$1"  # "day" or "week"
-    local fetch_script="$SCRIPT_DIR/fetch-wakatime.sh"
-    if [ -x "$fetch_script" ]; then
-        "$fetch_script" "$mode" 2>/dev/null || echo "(WakaTime данные недоступны)"
+    # WP-273 R5: notify.sh — read-only из FMT, не substituted (нет плейсхолдеров).
+    local notify_script
+    if [ -n "${IWE_TEMPLATE:-}" ] && [ -f "$IWE_TEMPLATE/roles/synchronizer/scripts/notify.sh" ]; then
+        notify_script="$IWE_TEMPLATE/roles/synchronizer/scripts/notify.sh"
+    elif [ -f "$HOME/IWE/FMT-exocortex-template/roles/synchronizer/scripts/notify.sh" ]; then
+        notify_script="$HOME/IWE/FMT-exocortex-template/roles/synchronizer/scripts/notify.sh"
     else
-        echo "(fetch-wakatime.sh не найден)"
+        notify_script="$REPO_DIR/../synchronizer/scripts/notify.sh"  # legacy fallback
     fi
+    [ -f "$notify_script" ] && "$notify_script" strategist "$scenario" >> "$LOG_FILE" 2>&1 || true
 }
 
 run_claude() {
     local command_file="$1"
+    # Опциональная модель: второй аргумент или IWE_STRATEGIST_MODEL из env.
+    # Приоритет: аргумент > env > пустая строка (дефолт Claude CLI).
+    local model_override="${2:-${IWE_STRATEGIST_MODEL:-}}"
     local command_path="$PROMPTS_DIR/$command_file.md"
 
     if [ ! -f "$command_path" ]; then
@@ -65,35 +115,67 @@ run_claude() {
         exit 1
     fi
 
-    # Читаем содержимое команды
+    # Читаем содержимое команды.
+    # WP-273 0.29.6 R6.1**: build-runtime подменял плейсхолдеры в этих sed-выражениях
+    # → runner становился сломан после build (искал значение в промпте вместо плейсхолдера).
+    # Escape: собираем двойно-фигурные токены через bash-конкатенацию — build-runtime sed
+    # не находит цельный паттерн и не трогает.
     local prompt
-    prompt=$(cat "$command_path")
+    local _gov_repo="${IWE_GOVERNANCE_REPO:-DS-strategy}"
+    local _ws="${IWE_WORKSPACE:-$HOME/IWE}"
+    local _gh_user="${GITHUB_USER:-your-username}"
+    local _o='{''{' _c='}''}'  # escape: build-runtime ищет цельный двойно-фигурный токен с UPPER_NAME внутри, поэтому конкатенация одиночных скобок его не матчит
+    prompt=$(sed \
+        -e "s|${_o}GOVERNANCE_REPO${_c}|$_gov_repo|g" \
+        -e "s|${_o}WORKSPACE_DIR${_c}|$_ws|g" \
+        -e "s|${_o}GITHUB_USER${_c}|$_gh_user|g" \
+        "$command_path")
 
-    # Подставляем WakaTime данные в промпт (если есть плейсхолдеры)
-    if echo "$prompt" | grep -q '{{WAKATIME_DAY}}'; then
-        log "Fetching WakaTime data (day mode)"
-        local waka_day
-        waka_day=$(fetch_wakatime_data "day")
-        prompt="${prompt//\{\{WAKATIME_DAY\}\}/$waka_day}"
-    fi
-    if echo "$prompt" | grep -q '{{WAKATIME_WEEK}}'; then
-        log "Fetching WakaTime data (week mode)"
-        local waka_week
-        waka_week=$(fetch_wakatime_data "week")
-        prompt="${prompt//\{\{WAKATIME_WEEK\}\}/$waka_week}"
-    fi
+    # Inject current date + day of week (prevents LLM calendar arithmetic errors)
+    local ru_date_context
+    ru_date_context=$(python3 -c "
+import datetime
+days = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье']
+months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря']
+d = datetime.date.today()
+print(f'{d.day} {months[d.month-1]} {d.year}, {days[d.weekday()]}')
+")
+    prompt="[Системный контекст] Сегодня: ${ru_date_context}. ISO: ${DATE}. День недели №${DAY_OF_WEEK} (1=Пн..7=Вс). ЯЗЫК: отвечай ТОЛЬКО на русском. Украинский, английский и другие языки запрещены.
+
+${prompt}"
 
     log "Starting scenario: $command_file"
     log "Command file: $command_path"
+    log "Date context: $ru_date_context"
 
     cd "$WORKSPACE"
 
-    # Запуск AI CLI с содержимым команды как промпт
-    "$AI_CLI" $AI_CLI_EXTRA_FLAGS \
-        $AI_CLI_PROMPT_FLAG "$prompt" \
-        >> "$LOG_FILE" 2>&1
+    # Запуск Claude Code с содержимым команды как промпт (с timeout-защитой)
+    local rc=0
+    local model_args=()
+    if [ -n "$model_override" ]; then
+        model_args=(--model "$model_override")
+        log "Model override: $model_override"
+    fi
+    # NB: --dangerously-skip-permissions не используется — Claude Code блокирует флаг
+    # под root/sudo (Linux cron). --allowedTools задаёт явный whitelist, чего достаточно.
+    timeout "$CLAUDE_TIMEOUT" "$CLAUDE_PATH" \
+        "${model_args[@]}" \
+        --allowedTools "Read,Write,Edit,Glob,Grep,Bash" \
+        -p "$prompt" \
+        >> "$LOG_FILE" 2>&1 || rc=$?
 
-    log "Completed scenario: $command_file"
+    if [ $rc -eq 124 ]; then
+        log "WARN: Claude CLI timed out after ${CLAUDE_TIMEOUT}s for scenario: $command_file"
+    elif [ $rc -ne 0 ]; then
+        log "WARN: Claude CLI exited with code $rc for scenario: $command_file"
+    fi
+
+    if [ $rc -eq 0 ]; then
+        log "SUCCESS scenario: $command_file"
+    else
+        log "FAILED scenario: $command_file (rc=$rc)"
+    fi
 
     # Push changes to GitHub (чтобы бот мог читать через API)
     if git -C "$WORKSPACE" diff --quiet origin/main..HEAD 2>/dev/null; then
@@ -112,34 +194,59 @@ run_claude() {
     local summary
     summary=$(tail -5 "$LOG_FILE" | grep -v '^\[' | head -3)
     notify "Стратег: $command_file" "$summary"
+    return $rc
 }
 
 # Проверка: уже запускался ли сценарий сегодня
 already_ran_today() {
     local scenario="$1"
-    [ -f "$LOG_FILE" ] && grep -q "Completed scenario: $scenario" "$LOG_FILE"
+    [ -f "$LOG_FILE" ] && grep -q "SUCCESS scenario: $scenario" "$LOG_FILE"
 }
 
 # File-based lock to prevent concurrent execution (RunAtLoad + CalendarInterval race)
+# mkdir — атомарная операция на POSIX, исключает TOCTOU race condition
 LOCK_DIR="$LOG_DIR/locks"
 mkdir -p "$LOCK_DIR"
 
 acquire_lock() {
     local scenario="$1"
-    local lockfile="$LOCK_DIR/${scenario}.${DATE}.lock"
-    if ! mkdir "$lockfile" 2>/dev/null; then
-        log "SKIP: $scenario already running (lock exists: $lockfile)"
-        exit 0
+    local lockdir="$LOCK_DIR/${scenario}.${DATE}.lck"
+    if ! mkdir "$lockdir" 2>/dev/null; then
+        local pid
+        pid=$(cat "$lockdir/pid" 2>/dev/null)
+        if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+            log "SKIP: $scenario already running (PID $pid)"
+            exit 2  # non-zero → scheduler won't mark_done
+        else
+            log "WARN: removing stale lock (PID $pid no longer exists): $lockdir"
+            rm -rf "$lockdir"
+            mkdir "$lockdir" || { log "ERROR: failed to acquire lock for $scenario"; exit 1; }
+        fi
     fi
-    # Auto-cleanup lock on exit
-    trap "rmdir '$lockfile' 2>/dev/null" EXIT
+    echo $$ > "$lockdir/pid" || { rm -rf "$lockdir"; log "ERROR: failed to write PID for $scenario"; exit 1; }
+    trap "rm -rf \"$lockdir\" 2>/dev/null" EXIT
 }
+
+# Читаем strategy_day из конфига (L4 Personal)
+RHYTHM_CONFIG="$HOME/.claude/projects/-Users-$(whoami)-IWE/memory/day-rhythm-config.yaml"
+STRATEGY_DAY_NAME=$(grep 'strategy_day:' "$RHYTHM_CONFIG" 2>/dev/null | awk '{print $2}' || echo "monday")
+# Конвертируем имя дня в номер (1=Mon..7=Sun)
+case "$STRATEGY_DAY_NAME" in
+    monday)    STRATEGY_DAY_NUM=1 ;;
+    tuesday)   STRATEGY_DAY_NUM=2 ;;
+    wednesday) STRATEGY_DAY_NUM=3 ;;
+    thursday)  STRATEGY_DAY_NUM=4 ;;
+    friday)    STRATEGY_DAY_NUM=5 ;;
+    saturday)  STRATEGY_DAY_NUM=6 ;;
+    sunday)    STRATEGY_DAY_NUM=7 ;;
+    *)         STRATEGY_DAY_NUM=1 ;;  # fallback: monday
+esac
 
 # Определяем какой сценарий запускать
 case "$1" in
     "morning")
-        # Определяем нужный сценарий
-        if [ "$DAY_OF_WEEK" -eq 1 ]; then
+        # Определяем нужный сценарий: strategy_day → session-prep, иначе → day-plan
+        if [ "$DAY_OF_WEEK" -eq "$STRATEGY_DAY_NUM" ]; then
             SCENARIO="session-prep"
         else
             SCENARIO="day-plan"
@@ -152,13 +259,13 @@ case "$1" in
             exit 0
         fi
 
-        if [ "$DAY_OF_WEEK" -eq 1 ]; then
-            log "Monday morning: running session prep"
-            run_claude "session-prep"
+        if [ "$DAY_OF_WEEK" -eq "$STRATEGY_DAY_NUM" ]; then
+            log "Strategy day ($STRATEGY_DAY_NAME): running session prep"
+            run_claude "session-prep" "claude-sonnet-4-6"
             notify_telegram "session-prep"
         else
             log "Morning: running day plan"
-            run_claude "day-plan"
+            run_claude "day-plan" "claude-sonnet-4-6"
             notify_telegram "day-plan"
         fi
         ;;
@@ -168,49 +275,60 @@ case "$1" in
         notify_telegram "evening"
         ;;
     "week-review")
+        acquire_lock "week-review"
+        if already_ran_today "week-review"; then
+            log "SKIP: week-review already completed today"
+            exit 0
+        fi
         log "Sunday: running week review"
-        run_claude "week-review"
-        # Fallback push for Knowledge Index (optional, skip if repo doesn't exist)
-        KI_REPO="/home/alexey/IWE/DS-Knowledge-Index-alexeystrybakov"
-        if [ -d "$KI_REPO/.git" ]; then
-            if git -C "$KI_REPO" log --oneline -1 --since="1 hour ago" --grep="week-review" 2>/dev/null | grep -q .; then
-                git -C "$KI_REPO" push >> "$LOG_FILE" 2>&1 && log "Pushed Knowledge Index (fallback)" || log "WARN: KI push failed"
-            fi
+        run_claude "week-review" "claude-opus-4-7"
+        # Fallback push for Knowledge Index (week-review creates a post there)
+        # KI_REPO may not exist for all users — guard with [ -d ]
+        KI_REPO="$HOME/IWE/DS-Knowledge-Index"
+        if [ -d "$KI_REPO/.git" ] && git -C "$KI_REPO" log --oneline -1 --since="1 hour ago" --grep="week-review" 2>/dev/null | grep -q .; then
+            git -C "$KI_REPO" push >> "$LOG_FILE" 2>&1 && log "Pushed Knowledge Index (fallback)" || log "WARN: KI push failed"
         fi
         notify_telegram "week-review"
         ;;
     "session-prep")
         log "Manual: running session prep"
-        run_claude "session-prep"
+        run_claude "session-prep" "claude-sonnet-4-6"
         notify_telegram "session-prep"
         ;;
     "day-plan")
         log "Manual: running day plan"
-        run_claude "day-plan"
+        run_claude "day-plan" "claude-sonnet-4-6"
         notify_telegram "day-plan"
         ;;
     "note-review")
         acquire_lock "note-review"
         log "Evening: running note review"
-        # Canary: count bold notes before
+        # Canary: count bold notes before (exclude 🔄 — deferred ideas stay bold by design)
+        # NB: `grep -c` при exit 1 (no matches) печатает "0" до `||`, так что `|| echo 0`
+        # давал двухстрочный "0\n0" и ломал арифметику. Используем `|| true` + fallback.
         FLEETING="$WORKSPACE/inbox/fleeting-notes.md"
-        BOLD_BEFORE=$(grep -c '^\*\*' "$FLEETING" 2>/dev/null || echo 0)
-        log "Canary: $BOLD_BEFORE bold notes before note-review"
+        BOLD_BEFORE=$(grep -c '^\*\*' "$FLEETING" 2>/dev/null || true); BOLD_BEFORE=${BOLD_BEFORE:-0}
+        BOLD_NEW_BEFORE=$(grep -vc '🔄' <(grep '^\*\*' "$FLEETING" 2>/dev/null) 2>/dev/null || true); BOLD_NEW_BEFORE=${BOLD_NEW_BEFORE:-0}
+        log "Canary: $BOLD_BEFORE bold total ($BOLD_NEW_BEFORE new, $(( BOLD_BEFORE - BOLD_NEW_BEFORE )) deferred 🔄)"
 
-        run_claude "note-review"
+        run_claude "note-review" "claude-haiku-4-5-20251001"
 
-        # Canary: count bold notes after — if same or more, Step 10 likely failed
-        BOLD_AFTER=$(grep -c '^\*\*' "$FLEETING" 2>/dev/null || echo 0)
-        log "Canary: $BOLD_AFTER"
-        NON_BOLD=$(grep -c '^[^*#>-]' "$FLEETING" 2>/dev/null || echo 0)
-        log "Non-bold content lines: $NON_BOLD"
-        if [ "$BOLD_AFTER" -ge "$BOLD_BEFORE" ] && [ "$BOLD_BEFORE" -gt 0 ]; then
-            log "WARN: Note-Review Step 10 may have failed — bold notes did not decrease ($BOLD_BEFORE → $BOLD_AFTER)"
-        fi
+        # Canary: count bold notes after (needs to be visible for alert at line ~274)
+        BOLD_AFTER=$(grep -c '^\*\*' "$FLEETING" 2>/dev/null || true); BOLD_AFTER=${BOLD_AFTER:-0}
+        BOLD_NEW_AFTER=$(grep -vc '🔄' <(grep '^\*\*' "$FLEETING" 2>/dev/null) 2>/dev/null || true); BOLD_NEW_AFTER=${BOLD_NEW_AFTER:-0}
+        # Non-blocking diagnostic (isolated from set -e to protect cleanup below)
+        (
+            log "Canary: $BOLD_AFTER bold total ($BOLD_NEW_AFTER new)"
+            NON_BOLD=$(grep -c '^[^*#>-]' "$FLEETING" 2>/dev/null || true); NON_BOLD=${NON_BOLD:-0}
+            log "Non-bold content lines: $NON_BOLD"
+            if [ "$BOLD_NEW_AFTER" -ge "$BOLD_NEW_BEFORE" ] && [ "$BOLD_NEW_BEFORE" -gt 0 ]; then
+                log "WARN: Note-Review Step 10 may have failed — new bold notes did not decrease ($BOLD_NEW_BEFORE → $BOLD_NEW_AFTER)"
+            fi
+        ) || true
 
         # Deterministic cleanup: archive non-bold, non-🔄 notes (safety net for LLM Step 10)
         log "Running deterministic cleanup..."
-        CLEANUP_OUTPUT=$(bash "$SCRIPT_DIR/cleanup-processed-notes.sh" 2>&1) || true
+        CLEANUP_OUTPUT=$(python3 "$SCRIPT_DIR/cleanup-processed-notes.py" 2>&1) || true
         log "Cleanup: $CLEANUP_OUTPUT"
 
         # If cleanup made changes, commit and push
@@ -223,14 +341,13 @@ case "$1" in
             log "Cleanup: no changes to commit"
         fi
 
-        # Alert if LLM failed AND cleanup was needed
-        if [ "$BOLD_AFTER" -ge "$BOLD_BEFORE" ] && [ "$BOLD_BEFORE" -gt 0 ]; then
+        # Alert if LLM failed AND cleanup was needed (only for NEW bold, not deferred 🔄)
+        if [ "$BOLD_NEW_AFTER" -ge "$BOLD_NEW_BEFORE" ] && [ "$BOLD_NEW_BEFORE" -gt 0 ]; then
             ENV_FILE="$HOME/.config/aist/env"
             if [ -f "$ENV_FILE" ]; then
                 set -a; source "$ENV_FILE"; set +a
-                ALERT_TEXT="⚠️ <b>Note-Review canary</b>: Step 10 не сработал ($BOLD_BEFORE → $BOLD_AFTER bold). Deterministic cleanup applied."
-                ALERT_JSON=$(printf '%s' "$ALERT_TEXT" | sed 's/\\/\\\\/g; s/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
-                ALERT_JSON="\"${ALERT_JSON}\""
+                ALERT_TEXT="⚠️ <b>Note-Review canary</b>: Step 10 не сработал ($BOLD_NEW_BEFORE → $BOLD_NEW_AFTER new bold). Deterministic cleanup applied."
+                ALERT_JSON=$(printf '%s' "$ALERT_TEXT" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read()))')
                 curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
                     -H "Content-Type: application/json" \
                     -d "{\"chat_id\":\"${TELEGRAM_CHAT_ID}\",\"text\":${ALERT_JSON},\"parse_mode\":\"HTML\"}" >> "$LOG_FILE" 2>&1 || true
@@ -241,7 +358,7 @@ case "$1" in
         ;;
     "day-close")
         log "Manual: running day close"
-        run_claude "day-close"
+        run_claude "day-close" "claude-sonnet-4-6"
         notify_telegram "day-close"
         ;;
     "strategy-session")

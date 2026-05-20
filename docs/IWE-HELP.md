@@ -1,20 +1,21 @@
 # IWE: справочник для бота
 
-> Краткая справка по Intelligent Working Environment (IWE) для поиска и ответов бота.
+> Краткая справка по Intellectual Work Environment (IWE) для поиска и ответов бота.
 > Полная установка: [SETUP-GUIDE.md](SETUP-GUIDE.md)
+> Не на macOS или не Claude Code? → **[PORTABILITY.md](PORTABILITY.md)**
 >
-> **Source-of-truth:** Pack-сущности платформы (доступны через MCP `knowledge-mcp`):
+> **Source-of-truth:** Pack-сущности платформы (доступны через Gateway `iwe-knowledge`):
 > - `DP.IWE.001` — что такое IWE, зачем, архитектура
 > - `DP.IWE.002` — шаблон и установка, пререквизиты, FAQ, безопасность
 > - `DP.EXOCORTEX.001` — архитектура экзокортекса (3 слоя, модули)
-> - `DP.ARCH.002` — тиры T1-T5
+> - `DP.ARCH.002` — тиры T0-T4 + TM1-TM3 + TA1-TA4 + TD1
 > - `DP.ROLE.001` — реестр ИИ-ролей
 
 ---
 
 ## Что такое IWE
 
-IWE (Intelligent Working Environment) — интеллектуальная рабочая среда. Описывается через пять видов (FPF A.7: **Роль → Метод → Рабочий продукт**):
+IWE (Intellectual Work Environment) — интеллектуальная рабочая среда. Описывается через пять видов (FPF A.7: **Роль → Метод → Рабочий продукт**):
 
 | Вид | Что | Примеры |
 |-----|-----|---------|
@@ -24,38 +25,7 @@ IWE (Intelligent Working Environment) — интеллектуальная ра�
 | **Методы** | Процедуры «как делать» | Протокол ОРЗ, Capture-to-Pack, ArchGate, KE, Note-Review |
 | **Рабочие продукты** | Что производится | DS-strategy, Pack-документы, DS-проекты, события ЦД |
 
-Полная архитектурная модель: [LEARNING-PATH.md § 1.2](LEARNING-PATH.md). Source-of-truth: `DP.IWE.001` (через MCP: `knowledge-mcp search("IWE архитектура")`).
-
----
-
-## Возможности по репозиториям
-
-### DS-exocortex — Личная база знаний
-- **articles/** — PDF научных работ + трекер ARTICLES.md
-- **books/** — заметки из книг, поэзия, reading-list
-- **courses/** — материалы курсов (философия, химия и др.)
-- **theses/** — диссертационные PDF + THESES.md
-- **movies/** / **music/** — медиатреккеры (watchlist, favorites)
-- **notes/** — seed-заметки, vocabulary
-- **memory/** — 10 файлов: протоколы сессий ОРЗ, навигация, SOTA, роли, различения
-
-### DS-strategy — Стратегический хаб
-- Неудовлетворённости, приоритеты, РП (рабочие продукты)
-- **DayPlan / WeekPlan** — агрегированные планы из всех репо
-- Hub-and-spoke: обходит все `IWE/*/WORKPLAN.md` → единый план
-
-### PACK-* — Предметные домены
-
-| Репозиторий | Предмет |
-|---|---|
-| `PACK-germanium-crystals` | Кристаллы GeO₂: термодинамика, Raman, PFM, PL |
-| `PACK-lensless-imaging` | Безлинзовая микроскопия (TUBS) |
-| `PACK-philosophy` | Философия |
-
-Каждый Pack: `knowledge/`, `references/`, `DOMAIN-MAP.md`, `WORKPLAN.md`. Pack — единственный source-of-truth для своего домена.
-
-### FMT-exocortex-template
-Эталонная структура для создания новых DS-репозиториев.
+Полная архитектурная модель: [LEARNING-PATH.md § 1.2](LEARNING-PATH.md). Source-of-truth: `DP.IWE.001` (через Gateway: `knowledge_search("IWE архитектура")`).
 
 ---
 
@@ -66,7 +36,7 @@ IWE (Intelligent Working Environment) — интеллектуальная ра�
 - Git + GitHub аккаунт + GitHub CLI (`gh`)
 - Node.js v18+ и npm
 - Claude Code CLI (`npm install -g @anthropic-ai/claude-code`)
-- Подписка Anthropic: **Claude Pro** ($20/мес) — рекомендуется для старта. Если получите значительный эффект от работы с Claude Code — переходите на **Claude Max** (~$100/мес) для полноценной работы без ограничений на количество сообщений.
+- Подписка Anthropic: **Claude Pro** ($20/мес) — рекомендуется для старта. При необходимости — **Claude Max** (~$100/мес) для работы без ограничений на количество сообщений.
 
 ### Опционально
 - VS Code (рекомендуется) или любой другой редактор с терминалом. Claude Code — CLI, работает в любом терминале (Terminal.app, iTerm2 и др.). VS Code удобен: редактор + терминал + расширение Claude Code в одном окне
@@ -91,30 +61,29 @@ IWE (Intelligent Working Environment) — интеллектуальная ра�
 
 ## Доступ к знаниям (MCP)
 
-MCP (Model Context Protocol) — протокол, через который Claude Code подключается к базе знаний платформы. Два сервера:
+MCP (Model Context Protocol) — протокол, через который Claude Code подключается к базе знаний платформы. Один Gateway-сервер агрегирует все бэкенды:
 
 | Сервер | Что даёт | Инструменты |
 |--------|---------|-------------|
-| **knowledge-mcp** | Поиск по Pack-репо, руководствам, DS (~5400 документов) | `search`, `get_document`, `list_sources` |
-| **ddt** | Цифровой двойник ученика (цели, самооценка) | `describe_by_path`, `read_digital_twin`, `write_digital_twin` |
+| **iwe-knowledge** (Gateway: `mcp.aisystant.com/mcp`) | Поиск по Pack-репо, руководствам, DS (~5400 документов) + цифровой двойник | `knowledge_search`, `knowledge_get_document`, `knowledge_list_sources`, `dt_read_digital_twin`, `dt_write_digital_twin`, `dt_describe_by_path` |
 
-> Поиск по руководствам: `knowledge-mcp search("запрос", source_type="guides")`.
+> Поиск по руководствам: `knowledge_search("запрос", source_type="guides")`.
 
-MCP подключается автоматически через `.claude/settings.local.json`. Проверка: открой Claude Code → попроси «Найди документы про принципы» — Claude использует `knowledge-mcp search`.
+MCP подключается через https://claude.ai/settings/connectors (см. SETUP-GUIDE §1.3b). Проверка: `/mcp` в Claude Code → серверы Connected. Попроси «Найди документы про принципы» — Claude использует `knowledge_search`.
 
 ---
 
 ## Три роли в IWE
 
-> В шаблоне экзокортекса пока **3 роли**: Стратег, Экстрактор, Синхронизатор. Набор будет расширяться.
-> Полный реестр ролей: `DP.ROLE.001` (через MCP: `knowledge-mcp search("реестр ролей агентов")`).
+> В шаблоне экзокортекса **3 роли**, доступные сразу: Стратег, Экстрактор, Синхронизатор. Платформа поддерживает 21 роль — они подключаются по мере развития системы.
+> Полный реестр ролей: `DP.ROLE.001` (через Gateway: `knowledge_search("реестр ролей агентов")`).
 
 ### Стратег (R1)
 Планирование и рефлексия. Каждое утро (Вт-Вс) формирует план дня из коммитов вчера. Понедельник — подготовка к недельной сессии. Вечером (23:00) — разбор заметок из Telegram.
 
 Ручной запуск (в терминале или встроенном терминале VS Code):
 ```bash
-bash ~/IWE/DS-exocortex/roles/strategist/scripts/strategist.sh day-plan
+bash ~/IWE/FMT-exocortex-template/roles/strategist/scripts/strategist.sh day-plan
 ```
 
 ### Экстрактор (R2)
@@ -122,12 +91,12 @@ bash ~/IWE/DS-exocortex/roles/strategist/scripts/strategist.sh day-plan
 
 Всегда предлагает, никогда не пишет без одобрения (human-in-the-loop).
 
-Установка (в терминале): `bash ~/IWE/DS-exocortex/roles/extractor/install.sh`
+Установка (в терминале): `bash ~/IWE/FMT-exocortex-template/roles/extractor/install.sh`
 
 ### Синхронизатор (R8)
 Центральный диспетчер (bash, не ИИ). Управляет расписанием всех ролей, отправляет уведомления в Telegram, делает ночной обзор кода.
 
-Установка (в терминале): `bash ~/IWE/DS-exocortex/roles/synchronizer/install.sh`
+Установка (в терминале): `bash ~/IWE/FMT-exocortex-template/roles/synchronizer/install.sh`
 
 ---
 
@@ -140,67 +109,6 @@ bash ~/IWE/DS-exocortex/roles/strategist/scripts/strategist.sh day-plan
 **Работа.** Claude выполняет задачу. На рубежах фиксирует знания: «Capture: [что] → [куда]».
 
 **Закрытие.** Скажи «закрывай» → Claude коммитит, пушит, обновляет память, бэкапит.
-
----
-
-## Ключевые механизмы
-
-### ОРЗ — структура каждой сессии
-
-**Открытие (Open)**
-- WP Gate: проверяет наличие задачи в плане недели. Нет — СТОП, задача оформляется как РП и записывается в три места: MEMORY.md, WeekPlan, `inbox/WP-N.md`
-- Ритуал: Claude объявляет роль, артефакт, метод, оценку времени, рекомендует модель (Opus/Sonnet/Haiku)
-- Регистрация сессии в `open-sessions.log`
-
-**Работа (Work):** Capture-to-Pack на каждом рубеже + Pre-action gates перед критичными действиями.
-
-**Закрытие (Close):** KE → отчёт → одобрение → commit + push → backup `memory/ → DS-strategy/exocortex/`.
-
-### Capture-to-Pack
-
-На каждом рубеже Claude задаёт вопрос: «есть ли знание для записи?»
-
-| Тип знания | Куда | Когда |
-|---|---|---|
-| Правило для всех репо | `IWE/CLAUDE.md` | Сразу |
-| Правило для одного репо | `<repo>/CLAUDE.md` | Сразу |
-| Доменное (архитектура, паттерны) | Pack | Close через KE |
-| Крупный урок | `memory/<topic>.md` | Close |
-| Зерно для поста | `drafts/` | Close |
-
-Анонс: *«Capture: [что] → [куда]»* — каждое захваченное знание видно.
-
-### Стратег (R1) — промпты
-
-6 сценариев: `session-prep`, `day-plan`, `strategy-session`, `note-review`, `day-close`, `week-review`. Автоматически запускается по расписанию (cron/launchd).
-
-### АрхГейт (ArchGate)
-
-Блокирующая проверка перед любым архитектурным решением. Порог — ≥8 по 7 характеристикам (ЭМОГССБ):
-
-| | Характеристика | Ключевой вопрос |
-|---|---|---|
-| Э | Эволюционируемость | Что сломается при изменении? |
-| М | Масштабируемость | Что будет при 10x? |
-| О | Обучаемость | Усиливает мышление или заменяет? |
-| Г | Генеративность | Создаёт платформу? |
-| С | Скорость | Бот <3 сек, CLI <1 сек? |
-| С | Современность | Соответствует SOTA? |
-| Б | Безопасность | PII, секреты, injection? |
-
-Решения с оценкой ≤7 Claude не предлагает.
-
-### IntegrationGate
-
-СТОП перед любым новым инструментом, агентом или системой. Пять вопросов до реализации: (1) тип, (2) контур L2/L3/L4, (3) роли, (4) продукты, (5) процессы. Нет ответов → не начинать.
-
-### KE (Knowledge Extraction)
-
-На Close: сбор captures → классификация → маршрутизация → Extraction Report → одобрение → применение. Pack с ≥3 новыми сущностями → предложение черновика для поста.
-
-### Pull-before-Commit
-
-Git-дисциплина для DS-strategy: `git pull --rebase` → изменение → `commit` → `push`. Стратег тоже пишет в этот репо ночью — без rebase = конфликты.
 
 ---
 
@@ -221,7 +129,7 @@ MEMORY.md — личные (текущие задачи, РП недели). Р�
 ## Обновление IWE
 
 ```bash
-cd ~/IWE/DS-exocortex
+cd ~/IWE/FMT-exocortex-template
 bash update.sh          # обновить
 bash update.sh --check  # проверить без применения
 ```
@@ -243,9 +151,9 @@ bash update.sh --check  # проверить без применения
 
 ## Частые проблемы
 
-**Claude Code не запускается** — проверь подписку Anthropic и `claude --version`. Начинать можно с Pro plan ($20/мес). Если упираетесь в лимиты — переходите на Max ($100/мес).
+**Claude Code не запускается** — проверь подписку Anthropic и `claude --version`. Начинать можно с Pro plan ($20/мес). При необходимости — Max (~$100/мес).
 
-**Стратег не формирует план** — проверь `launchctl list | grep strategist` (macOS). Если нет — `bash roles/strategist/install.sh`.
+**Стратег не формирует план** — macOS: `launchctl list | grep strategist`. Linux: `systemctl --user list-timers | grep strategist`. Если нет — `bash roles/strategist/install.sh`.
 
 **MEMORY.md не загружается** — проверь путь: `~/.claude/projects/-Users-<username>-IWE/memory/MEMORY.md`. Имя директории = путь к workspace через дефисы.
 
@@ -253,7 +161,7 @@ bash update.sh --check  # проверить без применения
 
 **Заметки не приходят из Telegram** — проверь подписку в @aist_me_bot. Формат: точка + текст (`.Моя заметка`).
 
-**MCP не работает (Claude не ищет по базе)** — проверь `.claude/settings.local.json` в корне экзокортекса. Должен содержать `mcpServers` с тремя серверами. Если файла нет — `bash update.sh`.
+**MCP не работает (Claude не ищет по базе)** — проверь подключение: `/mcp` в Claude Code. Серверы должны быть Connected. Если их нет — добавь через https://claude.ai/settings/connectors (см. SETUP-GUIDE §1.3b).
 
 **Как настроить уведомления в Telegram** — создай `~/.config/aist/env`:
 ```bash
@@ -267,7 +175,7 @@ export TELEGRAM_CHAT_ID="your-id"
 
 | Термин | Значение |
 |--------|---------|
-| IWE | Intelligent Working Environment — интеллектуальная рабочая среда |
+| IWE | Intellectual Work Environment — интеллектуальная рабочая среда |
 | Экзокортекс | Подсистема памяти IWE (CLAUDE.md + MEMORY.md + memory/) |
 | Pack | Предметная база знаний (source-of-truth для домена) |
 | DS-strategy | Личный стратегический хаб (приватный репо) |
@@ -279,8 +187,28 @@ export TELEGRAM_CHAT_ID="your-id"
 | Routing | Таблица маршрутизации знаний (куда класть captures) |
 | Marp | Инструмент для создания слайдов из Markdown. Workflow: `.md` → предпросмотр (VS Code) → PDF/HTML (`marp --pdf`). Используется для слайдоментов |
 | MCP | Model Context Protocol — доступ Claude Code к внешним базам знаний |
-| knowledge-mcp | MCP-сервер: поиск по Pack, руководствам, DS |
-| ddt | MCP-сервер: цифровой двойник ученика |
+| iwe-knowledge | Gateway MCP-сервер (`mcp.aisystant.com/mcp`): поиск по Pack, руководствам, DS + цифровой двойник |
+
+---
+
+---
+
+## Создание Pack (базы знаний домена)
+
+Pack — репозиторий с формализованными знаниями предметной области. Это source-of-truth: всё, что Claude должен знать о домене — здесь.
+
+**Когда нужен Pack:**
+- Регулярно работаешь в одной области
+- Хочешь, чтобы Claude знал термины и паттерны твоей области
+- Устал повторять контекст в каждой сессии
+
+**Как создать:** написать `/pack-new` в Claude Code.
+
+Скилл проведёт: выбор домена → имя Pack → структура → дорожная карта наполнения.
+
+**После создания Pack** наполняй через `/ke` (Knowledge Extraction) — фиксируй знания по ходу работы.
+
+Подробно: [PACK-CREATION.md](PACK-CREATION.md)
 
 ---
 
@@ -289,11 +217,12 @@ export TELEGRAM_CHAT_ID="your-id"
 **В этом репо:**
 - [SETUP-GUIDE.md](SETUP-GUIDE.md) — пошаговая установка (от нуля до работающего IWE)
 - [LEARNING-PATH.md](LEARNING-PATH.md) — полный путь изучения: принципы, протоколы, агенты, Pack, SOTA
+- [PACK-CREATION.md](PACK-CREATION.md) — создание Pack: домен, имя, структура, наполнение
 - [principles-vs-skills.md](principles-vs-skills.md) — почему навыков недостаточно: принципы и генеративная иерархия
 
-**В Pack (через MCP `knowledge-mcp search`):**
+**В Pack (через Gateway `knowledge_search`):**
 - `DP.IWE.001` — что такое IWE, зачем, 5 архитектурных видов, сравнения (vs экзокортекс, vs агенты, vs second brain)
 - `DP.IWE.002` — шаблон и установка: пререквизиты, стоимость, роли, ОРЗ, FAQ, безопасность
 - `DP.EXOCORTEX.001` — модульный экзокортекс: 3 слоя, template-sync, standard/personal
-- `DP.ARCH.002` — тиры T1-T5: что доступно на каждом уровне
+- `DP.ARCH.002` — тиры T0-T4 + TM1-TM3 + TA1-TA4 + TD1: что доступно на каждом уровне
 - `DP.ROLE.001` — полный реестр ИИ-ролей (21 роль)

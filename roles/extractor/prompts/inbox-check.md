@@ -22,15 +22,19 @@
 
 ### Шаг 0: Прочитать конфигурацию
 
-1. Прочитай `/home/alexey/IWE/DS-exocortex/roles/extractor/config/routing.md` — таблицы маршрутизации.
-2. Прочитай `/home/alexey/IWE/DS-exocortex/roles/extractor/config/feedback-log.md` — лог отклонённых кандидатов. Если capture похож на ранее отклонённый → пропусти.
+1. Прочитай `{{WORKSPACE_DIR}}/FMT-exocortex-template/roles/extractor/config/routing.md` — таблицы маршрутизации.
+2. Прочитай `{{WORKSPACE_DIR}}/{{GOVERNANCE_REPO}}/inbox/feedback-log.md` — лог отклонённых кандидатов (пишет R15 через /apply-captures). Если capture похож на ранее отклонённый → пропусти. Если файл не существует — продолжай без него.
 
-### Шаг 1: Проверить inbox
+### Шаг 1: Проверить inbox (WP-247 Ф-MULTI-SOURCE.3 — два канала)
 
-1. Прочитай `/home/alexey/IWE/DS-strategy/inbox/captures.md`
-2. Найди все pending записи (секции `### ...` без метки `[processed]`)
-3. Если pending записей нет → напиши в лог `No pending captures in inbox` и **заверши работу**
-4. Если pending > 5 → возьми первые 5 (по порядку в файле)
+1. Прочитай `{{WORKSPACE_DIR}}/{{GOVERNANCE_REPO}}/inbox/captures.md` — основной inbox
+2. Прочитай `{{WORKSPACE_DIR}}/{{GOVERNANCE_REPO}}/inbox/fleeting-notes.md` — secondary inbox (быстрые мысли пользователя). Файл может отсутствовать — пропусти.
+3. Найди все pending записи в обоих файлах: секции `### ...` БЕЗ любого из 4 маркеров статуса на той же строке (`[analyzed]`, `[processed]`, `[duplicate]`, `[defer]`). Если стоит хоть один — capture уже в workflow, пропускай.
+
+   **Источники различай:** при формализации в Шаге 2 укажи в кандидате `source_file: captures.md` или `source_file: fleeting-notes.md`. Это нужно R15 для пометки правильного файла маркером `[analyzed]` после accept.
+
+4. Если pending записей нет → сообщение `No pending captures in inbox` выводи через stdout (его поймает `extractor.sh` и запишет в `{{HOME_DIR}}/logs/extractor/YYYY-MM-DD.log`). **НЕ создавай отдельный лог-файл** в `{{GOVERNANCE_REPO}}/` или где-либо ещё. Заверши работу.
+5. Если pending > 5 → возьми первые 5 (по порядку: сначала captures.md, потом fleeting-notes.md)
 
 ### Шаг 2: Обработать каждый capture (max 5)
 
@@ -70,7 +74,7 @@
 
 ### Шаг 3: Сгенерировать Extraction Report
 
-Создай файл отчёта: `/home/alexey/IWE/DS-strategy/inbox/extraction-reports/{YYYY-MM-DD}-inbox-check.md`
+Создай файл отчёта: `{{WORKSPACE_DIR}}/{{GOVERNANCE_REPO}}/inbox/extraction-reports/{YYYY-MM-DD}-inbox-check.md`
 
 Если файл с таким именем уже существует, добавь суффикс: `{YYYY-MM-DD}-inbox-check-2.md`.
 
@@ -89,7 +93,7 @@ remaining: M
 # Extraction Report (Inbox-Check)
 
 **Дата:** {YYYY-MM-DD}
-**Источник:** DS-strategy/inbox/captures.md
+**Источник:** {{GOVERNANCE_REPO}}/inbox/captures.md
 **Обработано captures:** N из {total pending}
 **Осталось:** M
 
@@ -133,25 +137,27 @@ remaining: M
 | Осталось в inbox | M |
 ```
 
-### Шаг 4: Пометить обработанные captures
+### Шаг 4: Пометить captures как проанализированные
 
-В `DS-strategy/inbox/captures.md` — для каждого обработанного capture добавь метку `[processed YYYY-MM-DD]` к заголовку:
+В `{{GOVERNANCE_REPO}}/inbox/captures.md` — для каждого проанализированного capture добавь метку `[analyzed YYYY-MM-DD]` к заголовку:
 
 **Было:** `### Паттерн X`
-**Стало:** `### Паттерн X [processed 2026-02-12]`
+**Стало:** `### Паттерн X [analyzed 2026-02-12]`
+
+> **ВАЖНО:** НЕ ставить `[processed]`! Метка `[processed]` означает «записано в Pack» и ставится ТОЛЬКО в session-close после подтверждённой записи. `[analyzed]` означает «extraction report создан, ожидает применения».
 
 ### Шаг 5: Закоммитить
 
 1. Закоммить extraction report (новый)
-2. Закоммить captures.md (метки processed)
-3. Запушить DS-strategy
+2. Закоммить captures.md (метки analyzed)
+3. Запушить {{GOVERNANCE_REPO}}
 
 **Сообщение коммита:** `inbox-check: N captures → extraction report {date}`
 
 ## Что НЕ делать
 
 - **НЕ записывай в Pack** — только генерируй отчёт. Запись = только в интерактивной сессии после одобрения
-- Не удаляй captures из captures.md — только помечай [processed]
+- **НЕ ставь `[processed]`** — только `[analyzed]`. `[processed]` = записано в Pack (ставит session-close)
 - Не создавай файлы без frontmatter
 - Не экстрагируй governance-контент
 - Не предлагай кандидаты, похожие на паттерны из feedback-log.md
@@ -160,7 +166,7 @@ remaining: M
 
 > Когда пользователь говорит «review extraction report» или «apply KE report»:
 
-1. Прочитай последний отчёт из `DS-strategy/inbox/extraction-reports/`
+1. Прочитай последний отчёт из `{{GOVERNANCE_REPO}}/inbox/extraction-reports/`
 2. Покажи каждый кандидат пользователю
 3. Для accept — создай файл, закоммить в целевой Pack
 4. Для reject — записать причину в feedback-log.md

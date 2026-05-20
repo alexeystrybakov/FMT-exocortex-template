@@ -1,10 +1,10 @@
 # Экстрактор (Knowledge Extractor, R2)
 
-> Извлекает, формализует и маршрутизирует знания в Pack-репозитории.
+> Извлекает, формализует и маршрутизирует знания в Pack-репозитории и DS docs/.
 
 ## Что делает
 
-При закрытии сессии или по запросу — находит знания (паттерны, различения, методы, ошибки), формализует по шаблону SPF и предлагает записать в правильный Pack. Пользователь всегда одобряет перед записью.
+При закрытии сессии или по запросу — находит знания (паттерны, различения, методы, ошибки), формализует и предлагает записать в правильное место. **Два выхода routing:** доменное знание → Pack (по шаблону SPF), реализационное знание → DS docs/ (сценарии, процессы, данные). Пользователь всегда одобряет перед записью.
 
 ## Сценарии
 
@@ -30,13 +30,13 @@
 ```markdown
 | Домен | Pack | Префикс | Путь |
 |-------|------|---------|------|
-| Мой домен | PACK-my-domain | MD | /home/alexey/IWE/PACK-my-domain/pack/my-domain/ |
+| Мой домен | PACK-my-domain | MD | {{WORKSPACE_DIR}}/PACK-my-domain/pack/my-domain/ |
 ```
 
 ### 2. (Опционально) Установи автоматический inbox-check
 
 ```bash
-cd /home/alexey/IWE/DS-exocortex/roles/extractor
+cd {{WORKSPACE_DIR}}/FMT-exocortex-template/roles/extractor
 bash install.sh
 ```
 
@@ -46,23 +46,25 @@ bash install.sh
 
 ```bash
 # Inbox-check (без launchd)
-bash /home/alexey/IWE/DS-exocortex/roles/extractor/scripts/extractor.sh inbox-check
+bash {{WORKSPACE_DIR}}/FMT-exocortex-template/roles/extractor/scripts/extractor.sh inbox-check
 
 # Knowledge Audit
-bash /home/alexey/IWE/DS-exocortex/roles/extractor/scripts/extractor.sh audit
+bash {{WORKSPACE_DIR}}/FMT-exocortex-template/roles/extractor/scripts/extractor.sh audit
 ```
 
 ## Как работает
 
 ```
-Capture-to-Pack Pipeline:
+Knowledge Extraction Pipeline:
 
   Обнаружение → Классификация → Маршрутизация → Формализация → Валидация → Одобрение → Запись
 
   1. Найти знания (captures + пропущенные инсайты)
   2. Определить тип (entity, distinction, method, fm, wp, rule)
-  3. Определить Pack по домену (routing.md)
-  4. Создать файл по шаблону SPF (ID, frontmatter, секции)
+  3. Определить: domain или implementation? (тест доменности)
+     ├─ domain → Pack по домену (routing.md §1-4)
+     └─ implementation → DS docs/ по системе (routing.md §5)
+  4. Создать файл: Pack → шаблон SPF; DS → шаблон docs/
   5. Проверить: нет ли дубликатов и противоречий
   6. Показать Extraction Report пользователю
   7. Записать только одобренное
