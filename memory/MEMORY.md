@@ -16,17 +16,16 @@
 
 ---
 
-## РП текущей недели (W20: 11–17 мая)
+## РП текущей недели (W22: 25–31 мая)
 
 > Порядок: in_progress → pending → done.
 
 | # | РП | Бюджет | Статус | Репо |
 |---|-----|--------|--------|------|
-| 2 | WP-2 LUH: ревью Introduction v0 | 3h | pending | PACK-germanium-crystals |
-| 3 | GeO₂ KE: показатель преломления (суб 16.05) | 2h | partial | PACK-germanium-crystals |
-| 4 | BrightBrain: начать презентацию | 1h | pending | DS-strategy |
-| 5 | DS-strategy WORKPLAN.md — базовая структура | 0.5h | pending | DS-strategy |
-| 6 | Заметки «Страна философов» | 1h | pending | — |
+| 4 | BrightBrain: структура слайдов 1–3 (BLOCKING, 18.06) | 1.5h | pending | DS-strategy |
+| 2 | LUH: Background §1 — один абзац | 0.5h | pending | PACK-germanium-crystals |
+| WP-6 | TUBS: заказать HMSiR-NHS ester (операционный) | 1h | pending | PACK-lensless-imaging |
+| ~~5~~ | ~~WORKPLAN.md в репо~~ | ~~0.5h~~ | ✅ done 25.05 | ~~DS-strategy~~ |
 
 ---
 
