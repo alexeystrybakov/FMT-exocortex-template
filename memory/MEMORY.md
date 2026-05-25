@@ -23,7 +23,7 @@
 | # | РП | Бюджет | Статус | Репо |
 |---|-----|--------|--------|------|
 | 4 | BrightBrain: структура слайдов 1–3 (BLOCKING, 18.06) | 1.5h | pending | DS-strategy |
-| 2 | LUH: Background §1 — один абзац | 0.5h | pending | PACK-germanium-crystals |
+| 2 | LUH: Гл.2 Experimental (2.2.2+) — Background ✅ Apparatus ✅ | 0.5h+ | in_progress | PACK-germanium-crystals |
 | WP-6 | TUBS: заказать HMSiR-NHS ester (операционный) | 1h | pending | PACK-lensless-imaging |
 | ~~5~~ | ~~WORKPLAN.md в репо~~ | ~~0.5h~~ | ✅ done 25.05 | ~~DS-strategy~~ |
 
