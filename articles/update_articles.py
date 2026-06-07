@@ -1,47 +1,102 @@
-rows = [
-    ("Kiefer-2025", "Kiefer H., Dalton B.A., Netz R.R.", "2025", "Diffusion and friction from force correlations", "Journal of Chemical Physics", "10.1063/5.0261012", "diffusion, friction, force correlations", "tribology, friction"),
-    ("Okada-2019", "Okada K., Satoh M.", "2019", "Evaluation of the translational and rotational diffusion coefficients of a cubic particle", "Molecular Physics", "10.1080/00268976.2019.1631498", "diffusion coefficient, friction coefficient, Stokes flow, Brownian dynamics simulation", "tribology, diffusion, cubes"),
-    ("Rybakov-2023", "Rybakov A.S.T., Meyer L.L., Kuper H., Chalupa M., Becker V., Becker J.A.", "2023", "In situ microscopy of composite Germanium/Germanium oxide microneedle growth", "Journal of Crystal Growth", "10.1016/j.jcrysgro.2023.127133", "crystal growth, chemical transport, composite structure, in situ microscopy, Ge, GeO2 (amorphous)", "Ch.2, microneedles"),
-    ("Veeranarayanan-2012", "Veeranarayanan S. et al.", "2012", "FITC Labeled Silica Nanoparticles as Efficient Cell Tags", "Journal of Fluorescence", "10.1007/s10895-011-0991-3", "FITC, silica nanoparticles, fluorescence, photostability", "fluorescence, other"),
-    ("Rybakov-2025", "Rybakov A.S.T., Lie V.A., Mirecki L., Becker J.A.", "2025", "Growth of rutile GeO2 nanoneedles supported by in situ microscopy", "Journal of Crystal Growth", "10.1016/j.jcrysgro.2025.128351", "crystal growth, nanoneedles, in situ microscopy, GeO2 (tet.), SAED, TEM, Raman", "Ch.3, nanoneedles"),
-    ("Liu-2008", "Liu Y., Daum P.H.", "2008", "Relationship of refractive index to mass density and self-consistency of mixing rules for multicomponent mixtures like ambient aerosols", "Journal of Aerosol Science", "10.1016/j.jaerosci.2008.06.006", "refractive index, mixing rules, effective medium, aerosol", "optical, refractive-index"),
-    ("Filella-2023", "Filella M., May P.M.", "2023", "The aqueous solution chemistry of germanium under conditions of environmental and biological interest: Inorganic ligands", "Applied Geochemistry", "10.1016/j.apgeochem.2023.105631", "germanium, aqueous chemistry, Ge(OH)4, speciation, EXAFS", "dissolution, Ge(OH)4, speciation"),
-    ("Pokrovski-1998", "Pokrovski G.S., Schott J.", "1998", "Thermodynamic properties of aqueous Ge(IV) hydroxide complexes from 25 to 350 C", "Geochimica et Cosmochimica Acta", "", "germanium, Ge(OH)4, thermodynamics, hydrothermal, speciation, pKa", "dissolution, Ge(OH)4, thermodynamics"),
-    ("Xiao-2018", "Xiao Z. et al.", "2018", "Phase transformation of GeO2 glass to nanocrystals under ambient condition", "Nano Letters", "10.1021/acs.nanolett.8b01142", "GeO2, phase transformation, amorphous, hexagonal, nanocrystals, ambient", "hex, phase-transition, synthesis, Introduction"),
-    ("Armand-2020", "Armand P., Hermet P., Bantignies J.-L. et al.", "2020", "Optical properties in the infrared range of the birefringent alpha-GeO2 single crystal", "Materials Research Bulletin", "10.1016/j.materresbull.2020.110881", "alpha-GeO2, IR optical properties, birefringence, n_o, n_e, piezoelectric", "hex, properties, optical, IR"),
-    ("Bose-2012", "Bose N., Basu M., Mukherjee S.", "2012", "Study of optical properties of GeO2 nanocrystals as synthesized by hydrothermal technique", "Materials Research Bulletin", "10.1016/j.materresbull.2012.03.009", "alpha-GeO2, hydrothermal, photoluminescence, UV-vis, bandgap", "hex, synthesis, hydrothermal, optical, PL"),
-    ("Ramana-2010", "Ramana C.V., Carbajal-Franco G., Vemuri R.S., Troitskaia I.B., Gromilov S.A., Atuchin V.V.", "2010", "Optical properties and thermal stability of germanium oxide (GeO2) nanocrystals with alpha-quartz structure", "Materials Science and Engineering B", "10.1016/j.mseb.2010.03.060", "alpha-GeO2, nanocrystals, optical properties, thermal stability, bandgap, chemical precipitation", "hex, synthesis, properties, optical, bandgap"),
-    ("Lignie-2014", "Lignie A., Zhou W., Armand P. et al.", "2014", "High-Temperature Elastic Moduli of Flux-Grown alpha-GeO2 Single Crystal", "ChemPhysChem", "10.1002/cphc.201300793", "alpha-GeO2, elastic constants, Brillouin, refractive index n_o n_e, ellipsometry, piezoelectric, density", "hex, properties, optical, piezoelectric, elastic"),
-    ("Bielz-2011", "Bielz T., Soisuwan S., Kaindl R. et al.", "2011", "A High-Resolution Diffraction and Spectroscopic Study of the Low-Temperature Phase Transformation of Hexagonal to Tetragonal GeO2", "J. Phys. Chem. C", "10.1021/jp202457b", "GeO2, hexagonal, tetragonal, phase transformation, RbOH, XRD, Raman", "hex, tet, phase-transition"),
-    ("Fleming-1984", "Fleming J.W.", "1984", "Dispersion in GeO2-SiO2 glasses", "Applied Optics", "10.1364/AO.23.004486", "GeO2, SiO2, glass, refractive index, Sellmeier, dispersion, optical fiber", "optical, glass"),
-    ("Grimsditch-1998", "Grimsditch M., Polian A., Brazhkin V., Balitskii D.", "1998", "Elastic constants of alpha-GeO2", "J. Appl. Phys.", "10.1063/1.367117", "alpha-GeO2, elastic constants, Brillouin, refractive index, quartz-type", "hex, properties, elastic"),
-    ("Jing-2008", "Jing C., Hou J., Zhang Y.", "2008", "Morphology controls of GeO2 particles precipitated by a facile acid-induced decomposition of germanate ions in aqueous medium", "Journal of Crystal Growth", "10.1016/j.jcrysgro.2007.10.021", "GeO2, morphology control, acid-induced, LPD, hexagonal, cubic, aqueous", "hex, synthesis, cubes, LPD, dissolution"),
-    ("Wood-2006", "Wood S.A., Samson I.M.", "2006", "The aqueous geochemistry of gallium, germanium, indium and scandium", "Ore Geology Reviews", "10.1016/j.oregeorev.2003.06.002", "germanium, aqueous geochemistry, speciation, Ge(OH)4", "dissolution, Ge(OH)4, speciation, Introduction"),
-    ("Atuchin-2009", "Atuchin V.V., Gavrilova T.A., Gromilov S.A. et al.", "2009", "Low-Temperature Chemical Synthesis and Microstructure Analysis of GeO2 Crystals with alpha-Quartz Structure", "Crystal Growth & Design", "10.1021/cg8010037", "alpha-GeO2, low-temperature synthesis, chemical precipitation, microstructure", "hex, synthesis"),
-    ("Armand-2014", "Armand P., Lignie A., Beaurain M., Papet P.", "2014", "Flux-Grown Piezoelectric Materials: Application to alpha-Quartz Analogues", "Crystals", "10.3390/cryst4020168", "alpha-GeO2, flux growth, piezoelectric, quartz analogues, crystal growth", "hex, synthesis, properties, piezoelectric, flux"),
-    ("Rothweiler-2023", "Rothweiler P., Wagner R., Frahm R.R., Lutzenkirchen-Hecht D.", "2023", "X-ray Investigations of Sol-Gel-Derived GeO2 Nanoparticles", "Crystals", "10.3390/cryst13081219", "GeO2, nanoparticles, sol-gel, XRD, XANES", "hex, synthesis, sol-gel"),
-    ("Deringer-2014", "Deringer V.L., Dronskowski R.", "2014", "Chemical bonding at quartz-type GeO2 surfaces (Pauling third rule beyond the bulk)", "Chemical Science", "10.1039/c3sc52743c", "GeO2, quartz-type, surface chemistry, Pauling rules, chemical bonding, DFT", "hex, properties, surface, DFT"),
-    ("Kobayashi-2019", "Kobayashi K., Suzuki T.S.", "2019", "Growth of small GeO2 single crystals on a polyvinyl chloride substrate at room temperature using oversaturated aqueous solution", "Electronics and Communications in Japan", "10.1002/ecj.12175", "GeO2, single crystal, room temperature, aqueous solution, crystal growth", "hex, synthesis, cubes, aqueous"),
-    ("Jing-2012", "Jing C., Sun W., Wang W., Li Y., Chu J.", "2012", "Morphology and crystal phase evolution of GeO2 in liquid phase deposition process", "Journal of Crystal Growth", "10.1016/j.jcrysgro.2011.11.024", "GeO2, LPD, morphology, crystal phase evolution, hexagonal, tetragonal", "hex, tet, synthesis, cubes, LPD"),
-    ("Wang-2011", "Wang H., Tao Y., Zhang G.Q. et al.", "2011", "Germanium dioxide nanocubes with different size distributions and its Gibbs free energy theory", "Materials Science Forum", "10.4028/www.scientific.net/MSF.688.135", "GeO2, nanocubes, size distribution, Gibbs free energy", "hex, synthesis, cubes, reverse-micelle"),
-    ("Rimer-2007", "Rimer J.D., Roth D.D., Vlachos D.G., Lobo R.F.", "2007", "Self-Assembly and Phase Behavior of Germanium Oxide Nanoparticles in Basic Aqueous Solutions", "Langmuir", "10.1021/la062845m", "GeO2, nanoparticles, self-assembly, aqueous solution, basic, phase behavior, Ge(OH)4", "dissolution, Ge(OH)4, speciation, hex"),
-    ("Wu-2011", "Wu W., Zou X., Li Q. et al.", "2011", "Simple Synthesis and Luminescence Characteristics of PVP-Capped GeO2 Nanoparticles", "Journal of Nanomaterials", "10.1155/2011/841701", "GeO2, nanoparticles, PVP, luminescence, synthesis, rutile", "tet, synthesis, optical, PL"),
-    ("Davis-2007", "Davis T.M., Snyder M.A., Tsapatsis M.", "2007", "Germania Nanoparticles and Nanocrystals at Room Temperature in Water and Aqueous Lysine Sols", "Langmuir", "10.1021/la702526c", "GeO2, nanoparticles, nanocrystals, aqueous solution, room temperature, lysine", "hex, synthesis, cubes, dissolution"),
-    ("Javadi-2014", "Javadi M., Yang Z., Veinot J.G.C.", "2014", "Surfactant-free synthesis of GeO2 nanocrystals with controlled morphologies", "Chemical Communications", "10.1039/c4cc01490a", "GeO2, nanocrystals, surfactant-free, morphology control, sol-gel", "hex, synthesis, cubes, sol-gel"),
-    ("Kosova-1991", "Kosova T.B., Dem'yanets L.N.", "1991", "Hydrothermal chemistry and growth of hexagonal germanium dioxide", "Growth of Crystals, Vol. 16", "", "alpha-GeO2, hydrothermal, crystal growth, hexagonal, dissolution, solubility", "hex, synthesis, hydrothermal, dissolution"),
-    ("Akinfiev-2015", "Akinfiev N.N., Plyasunov A.V., Pokrovski G.S.", "2015", "An equation of state for predicting the thermodynamic properties and vapour-liquid partitioning of aqueous Ge(OH)4", "Fluid Phase Equilibria", "10.1016/j.fluid.2015.02.010", "Ge(OH)4, thermodynamics, equation of state, vapour-liquid partitioning, aqueous", "dissolution, Ge(OH)4, thermodynamics"),
+#!/usr/bin/env python3
+"""
+ARTICLES.md auto-updater.
+- Reads *.pdf in articles/ directory
+- Derives short label (Author-Year) from filename (Author-Year-journal.pdf)
+- Preserves existing rows by matching short labels
+- Adds TODO placeholder rows for new PDFs not yet in ARTICLES.md
+Run manually or automatically via git pre-commit hook.
+"""
+
+import os
+import re
+
+ARTICLES_DIR = os.path.dirname(os.path.abspath(__file__))
+ARTICLES_FILE = os.path.join(ARTICLES_DIR, "ARTICLES.md")
+
+HEADER = [
+    "# Articles", "",
+    "| Label | Authors | Year | Title | Journal | DOI | Keywords | Topic |",
+    "|-------|---------|------|-------|---------|-----|----------|-------|",
 ]
 
-lines = ["# Articles", "",
-    "| Label | Authors | Year | Title | Journal | DOI | Keywords | Topic |",
-    "|-------|---------|------|-------|---------|-----|----------|-------|"]
 
-for r in rows:
-    label, authors, year, title, journal, doi, keywords, topic = r
-    doi_cell = f"[{doi}](https://doi.org/{doi})" if doi else "—"
-    lines.append(f"| [{label}] | {authors} | {year} | {title} | {journal} | {doi_cell} | {keywords} | {topic} |")
+def filename_to_label(filename):
+    """Derive short label from PDF filename.
+    'Kiefer-2025-jcp.pdf' -> 'Kiefer-2025'
+    'Xiao-2018-nanolett-si.pdf' -> 'Xiao-2018'
+    """
+    name = filename.replace(".pdf", "")
+    parts = name.split("-")
+    # Label = first two components: Author + Year (4-digit number)
+    label_parts = []
+    for part in parts:
+        label_parts.append(part)
+        if re.match(r"^\d{4}$", part):
+            break
+    return "-".join(label_parts)
 
-with open("/home/alexey/IWE/DS-exocortex/articles/ARTICLES.md", "w") as f:
-    f.write("\n".join(lines) + "\n")
 
-print(f"Done: {len(rows)} rows written")
+def get_pdfs():
+    """Return list of (label, filename) for all PDFs, sorted by filename."""
+    result = []
+    for f in sorted(os.listdir(ARTICLES_DIR)):
+        if f.endswith(".pdf"):
+            label = filename_to_label(f)
+            result.append((label, f))
+    return result
+
+
+def parse_existing_rows(filepath):
+    """Return dict {label: row_string} from existing ARTICLES.md."""
+    rows = {}
+    if not os.path.exists(filepath):
+        return rows
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip()
+            if not line.startswith("|"):
+                continue
+            parts = line.split("|")
+            if len(parts) < 2:
+                continue
+            cell = parts[1].strip()
+            m = re.match(r"\[(.+?)\]", cell)
+            if m and "Label" not in cell and "---" not in cell:
+                rows[m.group(1)] = line
+    return rows
+
+
+def main():
+    pdfs = get_pdfs()
+    existing = parse_existing_rows(ARTICLES_FILE)
+
+    lines = HEADER[:]
+    seen_labels = set()
+    new_count = 0
+
+    for label, filename in pdfs:
+        if label in seen_labels:
+            continue  # skip duplicates (e.g. -si supporting info for same label)
+        seen_labels.add(label)
+
+        if label in existing:
+            lines.append(existing[label])
+        else:
+            lines.append(f"| [{label}] | — | — | TODO: {filename} | TODO | — | — | — |")
+            new_count += 1
+
+    # Preserve rows whose PDFs were removed from disk (don't lose data)
+    for label, row in existing.items():
+        if label not in seen_labels:
+            lines.append(row)
+
+    with open(ARTICLES_FILE, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+    total = len(seen_labels)
+    print(f"ARTICLES.md updated: {total} articles total, {new_count} new placeholder(s) added")
+
+
+if __name__ == "__main__":
+    main()
