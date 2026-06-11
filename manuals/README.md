@@ -10,6 +10,7 @@
 | camera software | ThorImage®CAM | Thorlabs | — | [camera](\\wsl$\Ubuntu\home\alexey\IWE\DS-exocortex\manuals\camera) |
 | camera quick start | Digital Camera (USB 3.0 series) | Thorlabs | — | [camera](\\wsl$\Ubuntu\home\alexey\IWE\DS-exocortex\manuals\camera) |
 | refractometer (Abbe) | AR4 | KRÜSS | LUH | [refractometer](\\wsl$\Ubuntu\home\alexey\IWE\DS-exocortex\manuals\refractometer) |
+| consumable (optical adhesive) | OCA 8146-2 | 3M | — | [consumables](\\wsl$\Ubuntu\home\alexey\IWE\DS-exocortex\manuals\consumables) |
 
 ## CC215MU Quantalux — ключевые характеристики
 
