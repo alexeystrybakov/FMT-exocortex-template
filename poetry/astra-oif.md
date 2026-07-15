@@ -132,6 +132,78 @@
 
 ---
 
+## «Песня вечного дыхания» (2025)
+
+<details>
+<summary><b>Текст</b></summary>
+
+...
+
+</details>
+
+<details>
+<summary><b>Анализ</b></summary>
+
+...
+
+</details>
+
+---
+
+## «Чёрный дрозд и собирательница ягод на болоте» (2025)
+
+<details>
+<summary><b>Текст</b></summary>
+
+...
+
+</details>
+
+<details>
+<summary><b>Анализ</b></summary>
+
+...
+
+</details>
+
+---
+
+## «Дерево» (2026)
+
+<details>
+<summary><b>Текст</b></summary>
+
+...
+
+</details>
+
+<details>
+<summary><b>Анализ</b></summary>
+
+...
+
+</details>
+
+---
+
+## «Боль черноглазого пса» (2026)
+
+<details>
+<summary><b>Текст</b></summary>
+
+...
+
+</details>
+
+<details>
+<summary><b>Анализ</b></summary>
+
+...
+
+</details>
+
+---
+
 ## «... и҆ ничто́же невозмо́жно бꙋ́детъ ва́мъ» (2026)
 
 <details>
