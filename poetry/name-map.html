@@ -1,0 +1,506 @@
+<title>Карта имён — Астра Оиф</title>
+<style>
+:root {
+  --bg: #F2EDE4;
+  --text: #2C231A;
+  --muted: #9A8F84;
+  --poem-d: #6B3A4A;
+  --poem-l: #4270A8;
+  --poem-r: #8C5A36;
+  --poem-t: #3D6B4A;
+  --shared-c: #6A5088;
+  --pd-bg: rgba(107,58,74,0.09);  --pd-bd: rgba(107,58,74,0.3);
+  --pl-bg: rgba(66,112,168,0.09); --pl-bd: rgba(66,112,168,0.3);
+  --pr-bg: rgba(140,90,54,0.09);  --pr-bd: rgba(140,90,54,0.3);
+  --pt-bg: rgba(61,107,74,0.09);  --pt-bd: rgba(61,107,74,0.3);
+  --ps-bg: rgba(106,80,136,0.09); --ps-bd: rgba(106,80,136,0.3);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #130F0B; --text: #DDD5C4; --muted: #6A6058;
+    --pd-bg: rgba(107,58,74,0.16); --pl-bg: rgba(66,112,168,0.16);
+    --pr-bg: rgba(140,90,54,0.16); --pt-bg: rgba(61,107,74,0.16);
+    --ps-bg: rgba(106,80,136,0.16);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #130F0B; --text: #DDD5C4; --muted: #6A6058;
+  --pd-bg: rgba(107,58,74,0.16); --pl-bg: rgba(66,112,168,0.16);
+  --pr-bg: rgba(140,90,54,0.16); --pt-bg: rgba(61,107,74,0.16);
+  --ps-bg: rgba(106,80,136,0.16);
+}
+:root[data-theme="light"] {
+  --bg: #F2EDE4; --text: #2C231A; --muted: #9A8F84;
+  --pd-bg: rgba(107,58,74,0.09);  --pd-bd: rgba(107,58,74,0.3);
+  --pl-bg: rgba(66,112,168,0.09); --pl-bd: rgba(66,112,168,0.3);
+  --pr-bg: rgba(140,90,54,0.09);  --pr-bd: rgba(140,90,54,0.3);
+  --pt-bg: rgba(61,107,74,0.09);  --pt-bd: rgba(61,107,74,0.3);
+  --ps-bg: rgba(106,80,136,0.09); --ps-bd: rgba(106,80,136,0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+  padding: 3rem 2rem 4rem;
+}
+
+.eyebrow {
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3.5rem;
+}
+
+.graph-wrapper {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+#connections {
+  position: absolute;
+  top: 0; left: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+.graph {
+  display: grid;
+  grid-template-columns: 1fr 148px 1fr 148px 1fr;
+  grid-template-rows: auto auto auto;
+  column-gap: 1rem;
+  row-gap: 2.8rem;
+  position: relative;
+  z-index: 1;
+}
+
+.names-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 1.8rem 0;
+}
+.names-col.left   { align-items: flex-end; }
+.names-col.right  { align-items: flex-start; }
+.names-col.shared { align-items: center; }
+
+.poem-cell { display: flex; align-items: center; justify-content: center; }
+
+.poem-box {
+  width: 100%;
+  padding: 1.8rem 0.75rem;
+  text-align: center;
+  border-radius: 2px;
+}
+.poem-box.dog  { background: var(--poem-d); }
+.poem-box.left { background: var(--poem-l); }
+.poem-box.right{ background: var(--poem-r); }
+.poem-box.tree { background: var(--poem-t); }
+
+.poem-title {
+  color: #fff;
+  font-style: italic;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+.poem-year {
+  color: rgba(255,255,255,0.58);
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+}
+.poem-idea {
+  color: rgba(255,255,255,0.45);
+  font-size: 0.68rem;
+  font-style: italic;
+  margin-top: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.pill {
+  display: flex;
+  flex-direction: column;
+  padding: 0.28rem 0.72rem;
+  border-radius: 2px;
+}
+.names-col.left   .pill { align-items: flex-end;   text-align: right; }
+.names-col.right  .pill { align-items: flex-start; text-align: left; }
+.names-col.shared .pill { align-items: center;     text-align: center; }
+
+.pill.dog    { background: var(--pd-bg); border: 1px solid var(--pd-bd); }
+.pill.left   { background: var(--pl-bg); border: 1px solid var(--pl-bd); }
+.pill.right  { background: var(--pr-bg); border: 1px solid var(--pr-bd); }
+.pill.tree   { background: var(--pt-bg); border: 1px solid var(--pt-bd); }
+.pill.shared { background: var(--ps-bg); border: 1px solid var(--ps-bd); }
+
+.pill-name { font-size: 0.78rem; line-height: 1.4; }
+.pill.dog    .pill-name { color: var(--poem-d); }
+.pill.left   .pill-name { color: var(--poem-l); }
+.pill.right  .pill-name { color: var(--poem-r); }
+.pill.tree   .pill-name { color: var(--poem-t); }
+.pill.shared .pill-name { color: var(--shared-c); }
+
+.pill-tag {
+  font-size: 0.62rem;
+  font-style: italic;
+  line-height: 1.35;
+  margin-top: 0.1rem;
+  opacity: 0.68;
+}
+.pill.dog    .pill-tag { color: var(--poem-d); }
+.pill.left   .pill-tag { color: var(--poem-l); }
+.pill.right  .pill-tag { color: var(--poem-r); }
+.pill.tree   .pill-tag { color: var(--poem-t); }
+.pill.shared .pill-tag { color: var(--shared-c); }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2.8rem;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.07em;
+}
+.legend-item { display: flex; align-items: center; gap: 0.45rem; }
+.legend-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+</style>
+
+<p class="eyebrow">Карта имён — Астра Оиф</p>
+
+<div class="graph-wrapper">
+  <svg id="connections" aria-hidden="true"></svg>
+  <div class="graph">
+
+    <!-- Row 1: «Боль черноглазого пса» (центр) -->
+    <div class="names-col left"  id="col-dog-l" style="grid-row:1;grid-column:1"></div>
+    <div style="grid-row:1;grid-column:2"></div>
+    <div class="poem-cell" style="grid-row:1;grid-column:3">
+      <div class="poem-box dog" id="poem-d">
+        <div class="poem-title">«Боль черноглазого пса»</div>
+        <div class="poem-year">2024–2026</div>
+        <div class="poem-idea">тьма входит сама — и уходит сама</div>
+      </div>
+    </div>
+    <div style="grid-row:1;grid-column:4"></div>
+    <div class="names-col right" id="col-dog-r" style="grid-row:1;grid-column:5"></div>
+
+    <!-- Row 2: «Тысячеглазый» + shared + «...ничтоже» -->
+    <div class="names-col left"   id="col-l" style="grid-row:2;grid-column:1"></div>
+    <div class="poem-cell" style="grid-row:2;grid-column:2">
+      <div class="poem-box left" id="poem-l">
+        <div class="poem-title">«Тысячеглазый»</div>
+        <div class="poem-year">2026</div>
+        <div class="poem-idea">быть всем и не знать себя</div>
+      </div>
+    </div>
+    <div class="names-col shared" id="col-s" style="grid-row:2;grid-column:3"></div>
+    <div class="poem-cell" style="grid-row:2;grid-column:4">
+      <div class="poem-box right" id="poem-r">
+        <div class="poem-title">«... и҆ ничто́же невозмо́жно бꙋ́детъ ва́мъ»</div>
+        <div class="poem-year">2026</div>
+        <div class="poem-idea">несу в себе начало всех начал</div>
+      </div>
+    </div>
+    <div class="names-col right"  id="col-r" style="grid-row:2;grid-column:5"></div>
+
+    <!-- Row 3: «Дерево» (центр) -->
+    <div class="names-col left"  id="col-tree-l" style="grid-row:3;grid-column:1"></div>
+    <div style="grid-row:3;grid-column:2"></div>
+    <div class="poem-cell" style="grid-row:3;grid-column:3">
+      <div class="poem-box tree" id="poem-t">
+        <div class="poem-title">«Дерево»</div>
+        <div class="poem-year">2025–2026</div>
+        <div class="poem-idea">не дерево в тумане — в дереве туман</div>
+      </div>
+    </div>
+    <div style="grid-row:3;grid-column:4"></div>
+    <div class="names-col right" id="col-tree-r" style="grid-row:3;grid-column:5"></div>
+
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#6B3A4A"></div>«Черноглазый пёс»</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4270A8"></div>«Тысячеглазый»</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#6A5088"></div>«Тысячеглазый» + «...ничтоже»</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8C5A36"></div>«...ничтоже»</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3D6B4A"></div>«Дерево»</div>
+  <div class="legend-item">
+    <svg width="22" height="10" style="flex-shrink:0" aria-hidden="true">
+      <path d="M1,5 L21,5" stroke="#8A7B6A" stroke-width="1.3" stroke-dasharray="5,3" fill="none"/>
+    </svg>
+    одна мысль в разных поэмах
+  </div>
+</div>
+
+<script>
+var DL = [
+  {name:'Юнг',       tag:'тень — непризнанное «я»'},
+  {name:'Данте',     tag:'ров без ступеней вверх'},
+  {name:'Черчилль',  tag:'пёс приходит без приглашения'},
+  {name:'Кьеркегор', tag:'отчаяние парализует'},
+  {name:'Ницше',     tag:'круг, который изматывает'}
+];
+var DR = [
+  {name:'Псалмы',     tag:'вопль в пустоту'},
+  {name:'Книга Иова', tag:'тишина в ответ на вопрос'},
+  {name:'Буддизм',    tag:'сансара — круг страдания'},
+  {name:'Ник Дрейк',  tag:'пёс знает твоё имя'},
+  {name:'Беккет',     tag:'движение без движения'}
+];
+var L = [
+  {name:'Парменид',                   tag:'истина не в явлениях'},
+  {name:'Эмпедокл',                   tag:'стихии и борьба в нас'},
+  {name:'Гераклит',                   tag:'скрытый логос за борьбой'},
+  {name:'Лейбниц',                    tag:'каждый глаз отражает всё'},
+  {name:'Николай Кузанский',          tag:'бесконечное совпадает с точкой'},
+  {name:'Мартин Бубер',               tag:'я рождается во встрече'},
+  {name:'Упанишады / Рамана Махарши', tag:'кто остаётся за формами'},
+  {name:'Борхес',                     tag:'всё разом — синтез невозможен'},
+  {name:'Уитмен',                     tag:'я содержу в себе множества'},
+  {name:'Пессоа',                     tag:'каждое я реально и полно'},
+  {name:'Чжуанцзы',                   tag:'кто я: человек или бабочка'},
+  {name:'Аватамсака / Сеть Индры',    tag:'каждая точка отражает весь мир'},
+  {name:'Кальдерон де ла Барка',      tag:'жизнь — сон, но кто снится'}
+];
+var S = [
+  {name:'Платон',         tag:'апория как порог познания'},
+  {name:'Плотин',         tag:'из единого — и к единому'},
+  {name:'Мейстер Экхарт', tag:'основа души = основа бога'},
+  {name:'Гегель',         tag:'мышление открывает основу бытия'}
+];
+var R = [
+  {name:'Евангелие от Матфея',       tag:'вера сдвигает горы'},
+  {name:'Евангелие от Иоанна',       tag:'зерно умирает — плод живёт'},
+  {name:'Экклезиаст',                tag:'тщетность как отправная точка'},
+  {name:'Пророк Илия',               tag:'глас безмолвный после бури'},
+  {name:'Аристотель',                tag:'плод несёт в себе причину'},
+  {name:'Августин',                  tag:'источник — в тебе самом'},
+  {name:'Григорий Палама (исихазм)', tag:'нетварный свет — внутри'},
+  {name:'Спиноза',                   tag:'несу в себе свою причину'},
+  {name:'Кант',                      tag:'за чувственным — умопостигаемое'},
+  {name:'Фихте',                     tag:'препятствие как условие роста'},
+  {name:'Шеллинг',                   tag:'вечность видит себя через нас'},
+  {name:'Дионисий Ареопагит',        tag:'бог познаётся через отрицание'}
+];
+var TL = [
+  {name:'Платон',    tag:'клетка как пещера'},
+  {name:'Кант',      tag:'клетка задаёт всю оптику'},
+  {name:'Гегель',    tag:'я сам себя же отрицаю'},
+  {name:'Хайдеггер', tag:'рулевой не знает себя'},
+  {name:'Юнг',       tag:'индивидуация — путь к Самости'},
+  {name:'Ницше',     tag:'погоня за собственным хвостом'}
+];
+var TR = [
+  {name:'Сартр',         tag:'если сам не освобожу — кто?'},
+  {name:'Экхарт / Илия', tag:'Безмолвный Голос — тождество'},
+  {name:'Буддизм',       tag:'проснулся рулевой'},
+  {name:'Гельдерлин',    tag:'где опасность — там спасительное'},
+  {name:'Феникс',        tag:'сам себя сжигает'},
+  {name:'Пиндар',        tag:'стань тем, кто ты есть'}
+];
+
+function populate(id, items, cls) {
+  var col = document.getElementById(id);
+  items.forEach(function(item) {
+    var el = document.createElement('span');
+    el.className = 'pill ' + cls;
+    el.dataset.name = item.name;
+    var nm = document.createElement('span');
+    nm.className = 'pill-name';
+    nm.textContent = item.name;
+    el.appendChild(nm);
+    if (item.tag) {
+      var tg = document.createElement('span');
+      tg.className = 'pill-tag';
+      tg.textContent = item.tag;
+      el.appendChild(tg);
+    }
+    col.appendChild(el);
+  });
+}
+populate('col-dog-l',  DL, 'dog');
+populate('col-dog-r',  DR, 'dog');
+populate('col-l',       L, 'left');
+populate('col-s',       S, 'shared');
+populate('col-r',       R, 'right');
+populate('col-tree-l', TL, 'tree');
+populate('col-tree-r', TR, 'tree');
+
+var tid;
+function draw() { clearTimeout(tid); tid = setTimeout(_draw, 60); }
+
+function _draw() {
+  var svg = document.getElementById('connections');
+  var wrap = document.querySelector('.graph-wrapper');
+  var wR = wrap.getBoundingClientRect();
+  svg.setAttribute('width',  wrap.offsetWidth);
+  svg.setAttribute('height', wrap.offsetHeight);
+  svg.innerHTML = '';
+
+  /* Arrowhead markers */
+  var defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
+  [
+    ['ad','rgba(107,58,74,0.68)'],
+    ['al','rgba(66,112,168,0.68)'],
+    ['ar','rgba(140,90,54,0.68)'],
+    ['at','rgba(61,107,74,0.68)'],
+    ['as','rgba(106,80,136,0.68)']
+  ].forEach(function(pair) {
+    var mk = document.createElementNS('http://www.w3.org/2000/svg','marker');
+    mk.setAttribute('id', pair[0]);
+    mk.setAttribute('markerWidth','7'); mk.setAttribute('markerHeight','7');
+    mk.setAttribute('refX','6'); mk.setAttribute('refY','3.5');
+    mk.setAttribute('orient','auto');
+    var pt = document.createElementNS('http://www.w3.org/2000/svg','path');
+    pt.setAttribute('d','M0,0.5 L0,6.5 L6,3.5 z');
+    pt.setAttribute('fill', pair[1]);
+    mk.appendChild(pt); defs.appendChild(mk);
+  });
+  svg.appendChild(defs);
+
+  function rel(el) {
+    var r = el.getBoundingClientRect();
+    return {
+      left:   r.left   - wR.left,
+      right:  r.right  - wR.left,
+      top:    r.top    - wR.top,
+      bottom: r.bottom - wR.top,
+      cy:     r.top - wR.top + r.height / 2
+    };
+  }
+
+  function arc(x1, y1, x2, y2, stroke, marker) {
+    var p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    var mx = (x1 + x2) / 2;
+    p.setAttribute('d', 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2);
+    p.setAttribute('stroke', stroke);
+    p.setAttribute('stroke-width', '1.25');
+    p.setAttribute('fill', 'none');
+    p.setAttribute('marker-end', 'url(#'+marker+')');
+    svg.appendChild(p);
+  }
+
+  var pD = rel(document.getElementById('poem-d'));
+  var pL = rel(document.getElementById('poem-l'));
+  var pR = rel(document.getElementById('poem-r'));
+  var pT = rel(document.getElementById('poem-t'));
+
+  /* «Черноглазый пёс» — левые → poem-d */
+  var dLPills = Array.from(document.querySelectorAll('#col-dog-l .pill'));
+  dLPills.forEach(function(el, i) {
+    var r = rel(el);
+    var t = dLPills.length > 1 ? i / (dLPills.length - 1) : 0.5;
+    arc(r.right, r.cy, pD.left, pD.top + (pD.bottom-pD.top)*(0.08+t*0.84), 'rgba(107,58,74,0.22)', 'ad');
+  });
+  /* «Черноглазый пёс» — правые → poem-d */
+  var dRPills = Array.from(document.querySelectorAll('#col-dog-r .pill'));
+  dRPills.forEach(function(el, i) {
+    var r = rel(el);
+    var t = dRPills.length > 1 ? i / (dRPills.length - 1) : 0.5;
+    arc(r.left, r.cy, pD.right, pD.top + (pD.bottom-pD.top)*(0.08+t*0.84), 'rgba(107,58,74,0.22)', 'ad');
+  });
+
+  /* «Тысячеглазый» — левые → poem-l */
+  var lPills = Array.from(document.querySelectorAll('#col-l .pill'));
+  lPills.forEach(function(el, i) {
+    var r = rel(el);
+    var t = lPills.length > 1 ? i / (lPills.length - 1) : 0.5;
+    arc(r.right, r.cy, pL.left, pL.top + (pL.bottom-pL.top)*(0.08+t*0.84), 'rgba(66,112,168,0.22)', 'al');
+  });
+  /* Shared → poem-l и poem-r */
+  var sPills = Array.from(document.querySelectorAll('#col-s .pill'));
+  sPills.forEach(function(el, i) {
+    var r = rel(el);
+    var t = sPills.length > 1 ? i / (sPills.length - 1) : 0.5;
+    arc(r.left,  r.cy, pL.right, pL.top+(pL.bottom-pL.top)*(0.28+t*0.44), 'rgba(106,80,136,0.28)', 'as');
+    arc(r.right, r.cy, pR.left,  pR.top+(pR.bottom-pR.top)*(0.28+t*0.44), 'rgba(106,80,136,0.28)', 'as');
+  });
+  /* «...ничтоже» — правые → poem-r */
+  var rPills = Array.from(document.querySelectorAll('#col-r .pill'));
+  rPills.forEach(function(el, i) {
+    var r = rel(el);
+    var t = rPills.length > 1 ? i / (rPills.length - 1) : 0.5;
+    arc(r.left, r.cy, pR.right, pR.top + (pR.bottom-pR.top)*(0.08+t*0.84), 'rgba(140,90,54,0.22)', 'ar');
+  });
+
+  /* «Дерево» — левые → poem-t */
+  var tLPills = Array.from(document.querySelectorAll('#col-tree-l .pill'));
+  tLPills.forEach(function(el, i) {
+    var r = rel(el);
+    var t = tLPills.length > 1 ? i / (tLPills.length - 1) : 0.5;
+    arc(r.right, r.cy, pT.left, pT.top + (pT.bottom-pT.top)*(0.08+t*0.84), 'rgba(61,107,74,0.22)', 'at');
+  });
+  /* «Дерево» — правые → poem-t */
+  var tRPills = Array.from(document.querySelectorAll('#col-tree-r .pill'));
+  tRPills.forEach(function(el, i) {
+    var r = rel(el);
+    var t = tRPills.length > 1 ? i / (tRPills.length - 1) : 0.5;
+    arc(r.left, r.cy, pT.right, pT.top + (pT.bottom-pT.top)*(0.08+t*0.84), 'rgba(61,107,74,0.22)', 'at');
+  });
+
+  /* ── Пересечения мыслей между поэмами (пунктир) ─────────────────── */
+
+  function findPill(colId, name) {
+    var pills = Array.from(document.querySelectorAll('#' + colId + ' .pill'));
+    for (var i = 0; i < pills.length; i++) {
+      if (pills[i].dataset.name === name) return pills[i];
+    }
+    return null;
+  }
+
+  function dashArc(el1, side1, el2, side2, xOffset) {
+    var r1 = rel(el1), r2 = rel(el2);
+    var x1 = side1 === 'r' ? r1.right : r1.left;
+    var x2 = side2 === 'r' ? r2.right : r2.left;
+    var y1 = r1.cy, y2 = r2.cy;
+    var p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    var d;
+    if (xOffset) {
+      /* Same-side vertical arc — bulge outward */
+      d = 'M'+x1+','+y1+' C'+(x1+xOffset)+','+y1+' '+(x2+xOffset)+','+y2+' '+x2+','+y2;
+    } else {
+      /* Diagonal arc — standard bezier */
+      var mx = (x1 + x2) / 2;
+      d = 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2;
+    }
+    p.setAttribute('d', d);
+    p.setAttribute('stroke', 'rgba(110,100,88,0.5)');
+    p.setAttribute('stroke-width', '1.2');
+    p.setAttribute('fill', 'none');
+    p.setAttribute('stroke-dasharray', '5,3');
+    svg.appendChild(p);
+  }
+
+  /* 1. Гегель — Aufhebung: shared(row2) → Дерево-left(row3) */
+  var hegelS = findPill('col-s',      'Гегель');
+  var hegelT = findPill('col-tree-l', 'Гегель');
+  if (hegelS && hegelT) dashArc(hegelS, 'l', hegelT, 'r', null);
+
+  /* 2. Буддизм — колесо/сансара: Черноглазый-right(row1) → Дерево-right(row3) */
+  var buddhaD = findPill('col-dog-r',  'Буддизм');
+  var buddhaT = findPill('col-tree-r', 'Буддизм');
+  if (buddhaD && buddhaT) dashArc(buddhaD, 'r', buddhaT, 'r', 38);
+
+  /* 3. Безмолвный Голос: Ничтоже-right(row2) → Дерево-right(row3) */
+  var iliaR = findPill('col-r',      'Пророк Илия');
+  var ekhtT = findPill('col-tree-r', 'Экхарт / Илия');
+  if (iliaR && ekhtT) dashArc(iliaR, 'r', ekhtT, 'r', 22);
+}
+
+window.addEventListener('load', draw);
+window.addEventListener('resize', draw);
+</script>
