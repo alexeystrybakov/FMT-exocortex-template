@@ -1,68 +1,63 @@
 <title>Карта имён — Астра Оиф</title>
 <style>
 :root {
-  --bg: #F2EDE4;
-  --text: #2C231A;
-  --muted: #9A8F84;
-  --poem-d: #6B3A4A;
-  --poem-l: #4270A8;
-  --poem-r: #8C5A36;
-  --poem-t: #3D6B4A;
-  --shared-c: #6A5088;
-  --pd-bg: rgba(107,58,74,0.09);  --pd-bd: rgba(107,58,74,0.3);
-  --pl-bg: rgba(66,112,168,0.09); --pl-bd: rgba(66,112,168,0.3);
-  --pr-bg: rgba(140,90,54,0.09);  --pr-bd: rgba(140,90,54,0.3);
-  --pt-bg: rgba(61,107,74,0.09);  --pt-bd: rgba(61,107,74,0.3);
-  --ps-bg: rgba(106,80,136,0.09); --ps-bd: rgba(106,80,136,0.3);
+  --bg: #F2EDE4; --text: #2C231A; --muted: #9A8F84;
+  --nd-bg: rgba(44,35,26,0.04); --nd-bd: rgba(44,35,26,0.11);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #130F0B; --text: #DDD5C4; --muted: #6A6058;
-    --pd-bg: rgba(107,58,74,0.16); --pl-bg: rgba(66,112,168,0.16);
-    --pr-bg: rgba(140,90,54,0.16); --pt-bg: rgba(61,107,74,0.16);
-    --ps-bg: rgba(106,80,136,0.16);
-  }
-}
-:root[data-theme="dark"] {
+@media (prefers-color-scheme: dark) { :root {
   --bg: #130F0B; --text: #DDD5C4; --muted: #6A6058;
-  --pd-bg: rgba(107,58,74,0.16); --pl-bg: rgba(66,112,168,0.16);
-  --pr-bg: rgba(140,90,54,0.16); --pt-bg: rgba(61,107,74,0.16);
-  --ps-bg: rgba(106,80,136,0.16);
+  --nd-bg: rgba(221,213,196,0.05); --nd-bd: rgba(221,213,196,0.11);
+}}
+:root[data-theme="dark"]  {
+  --bg: #130F0B; --text: #DDD5C4; --muted: #6A6058;
+  --nd-bg: rgba(221,213,196,0.05); --nd-bd: rgba(221,213,196,0.11);
 }
 :root[data-theme="light"] {
   --bg: #F2EDE4; --text: #2C231A; --muted: #9A8F84;
-  --pd-bg: rgba(107,58,74,0.09);  --pd-bd: rgba(107,58,74,0.3);
-  --pl-bg: rgba(66,112,168,0.09); --pl-bd: rgba(66,112,168,0.3);
-  --pr-bg: rgba(140,90,54,0.09);  --pr-bd: rgba(140,90,54,0.3);
-  --pt-bg: rgba(61,107,74,0.09);  --pt-bd: rgba(61,107,74,0.3);
-  --ps-bg: rgba(106,80,136,0.09); --ps-bd: rgba(106,80,136,0.3);
+  --nd-bg: rgba(44,35,26,0.04); --nd-bd: rgba(44,35,26,0.11);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   background: var(--bg);
   color: var(--text);
   font-family: Georgia, 'Times New Roman', serif;
   min-height: 100vh;
-  padding: 3rem 2rem 4rem;
+  padding: 2.5rem 1.5rem 5rem;
 }
 
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  max-width: 1100px;
+  margin: 0 auto 2.8rem;
+}
 .eyebrow {
-  text-align: center;
   font-size: 0.68rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 3.5rem;
 }
+.theme-btn {
+  background: none;
+  border: 1px solid var(--muted);
+  color: var(--muted);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.26rem 0.65rem;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.theme-btn:hover { color: var(--text); border-color: var(--text); }
 
 .graph-wrapper {
   position: relative;
   max-width: 1100px;
   margin: 0 auto;
 }
-
 #connections {
   position: absolute;
   top: 0; left: 0;
@@ -70,435 +65,381 @@ body {
   overflow: visible;
   z-index: 0;
 }
-
 .graph {
   display: grid;
-  grid-template-columns: 1fr 148px 1fr 148px 1fr;
-  grid-template-rows: auto auto auto;
-  column-gap: 1rem;
-  row-gap: 2.8rem;
+  grid-template-columns: 232px 1fr 298px;
   position: relative;
   z-index: 1;
 }
 
-.names-col {
+/* ── Poems ── */
+.poems-col {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  justify-content: center;
-  padding: 1.8rem 0;
+  gap: 2rem;
+  padding: 1rem 0;
+  align-self: center;
 }
-.names-col.left   { align-items: flex-end; }
-.names-col.right  { align-items: flex-start; }
-.names-col.shared { align-items: center; }
-
-.poem-cell { display: flex; align-items: center; justify-content: center; }
-
 .poem-box {
-  width: 100%;
-  padding: 1.8rem 0.75rem;
-  text-align: center;
+  padding: 1.4rem 1rem;
   border-radius: 2px;
+  cursor: default;
+  transition: opacity 0.18s;
 }
-.poem-box.dog  { background: var(--poem-d); }
-.poem-box.left { background: var(--poem-l); }
-.poem-box.right{ background: var(--poem-r); }
-.poem-box.tree { background: var(--poem-t); }
-
+.poem-box[data-pid="p-dog"]   { background: #6B3A4A; }
+.poem-box[data-pid="p-tysy"]  { background: #4270A8; }
+.poem-box[data-pid="p-nic"]   { background: #8C5A36; }
+.poem-box[data-pid="p-tree"]  { background: #3D6B4A; }
+.poem-box[data-pid="p-drozd"] { background: #4A7A8A; }
 .poem-title {
   color: #fff;
   font-style: italic;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   line-height: 1.5;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 .poem-year {
-  color: rgba(255,255,255,0.58);
-  font-size: 0.66rem;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.63rem;
   letter-spacing: 0.07em;
 }
 .poem-idea {
-  color: rgba(255,255,255,0.45);
-  font-size: 0.68rem;
+  color: rgba(255,255,255,0.42);
+  font-size: 0.66rem;
   font-style: italic;
-  margin-top: 0.8rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid rgba(255,255,255,0.15);
-  letter-spacing: 0.02em;
+  margin-top: 0.65rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.14);
   line-height: 1.4;
 }
 
-.pill {
+/* ── Names ── */
+.names-col {
   display: flex;
   flex-direction: column;
-  padding: 0.28rem 0.72rem;
+  padding: 1rem 0;
+}
+.name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+.name-group + .name-group { margin-top: 0.28rem; }
+.name-node {
+  display: flex;
+  flex-direction: column;
+  padding: 0.26rem 0.65rem;
   border-radius: 2px;
+  background: var(--nd-bg);
+  border: 1px solid var(--nd-bd);
+  cursor: default;
+  transition: opacity 0.18s;
 }
-.names-col.left   .pill { align-items: flex-end;   text-align: right; }
-.names-col.right  .pill { align-items: flex-start; text-align: left; }
-.names-col.shared .pill { align-items: center;     text-align: center; }
-
-.pill.dog    { background: var(--pd-bg); border: 1px solid var(--pd-bd); }
-.pill.left   { background: var(--pl-bg); border: 1px solid var(--pl-bd); }
-.pill.right  { background: var(--pr-bg); border: 1px solid var(--pr-bd); }
-.pill.tree   { background: var(--pt-bg); border: 1px solid var(--pt-bd); }
-.pill.shared { background: var(--ps-bg); border: 1px solid var(--ps-bd); }
-
-.pill-name { font-size: 0.78rem; line-height: 1.4; }
-.pill.dog    .pill-name { color: var(--poem-d); }
-.pill.left   .pill-name { color: var(--poem-l); }
-.pill.right  .pill-name { color: var(--poem-r); }
-.pill.tree   .pill-name { color: var(--poem-t); }
-.pill.shared .pill-name { color: var(--shared-c); }
-
-.pill-tag {
-  font-size: 0.62rem;
+.n-name {
+  font-size: 0.76rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.n-tag {
+  font-size: 0.6rem;
   font-style: italic;
-  line-height: 1.35;
-  margin-top: 0.1rem;
-  opacity: 0.68;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 0.05rem;
 }
-.pill.dog    .pill-tag { color: var(--poem-d); }
-.pill.left   .pill-tag { color: var(--poem-l); }
-.pill.right  .pill-tag { color: var(--poem-r); }
-.pill.tree   .pill-tag { color: var(--poem-t); }
-.pill.shared .pill-tag { color: var(--shared-c); }
 
+.faded { opacity: 0.1 !important; }
+
+/* ── Legend ── */
 .legend {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 2.8rem;
-  font-size: 0.68rem;
+  gap: 1.8rem;
+  margin: 3rem auto 0;
+  max-width: 1100px;
+  font-size: 0.67rem;
   color: var(--muted);
   letter-spacing: 0.07em;
 }
-.legend-item { display: flex; align-items: center; gap: 0.45rem; }
-.legend-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+.leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.legend-note {
+  width: 100%;
+  text-align: center;
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-top: 0.7rem;
+  font-style: italic;
+}
 </style>
 
-<p class="eyebrow">Карта имён — Астра Оиф</p>
+<div class="top">
+  <p class="eyebrow">Карта имён — Астра Оиф</p>
+  <button class="theme-btn" onclick="toggleTheme()">тема</button>
+</div>
 
 <div class="graph-wrapper">
   <svg id="connections" aria-hidden="true"></svg>
   <div class="graph">
-
-    <!-- Row 1: «Боль черноглазого пса» (центр) -->
-    <div class="names-col left"  id="col-dog-l" style="grid-row:1;grid-column:1"></div>
-    <div style="grid-row:1;grid-column:2"></div>
-    <div class="poem-cell" style="grid-row:1;grid-column:3">
-      <div class="poem-box dog" id="poem-d">
-        <div class="poem-title">«Боль черноглазого пса»</div>
-        <div class="poem-year">2024–2026</div>
-        <div class="poem-idea">тьма входит сама — и уходит сама</div>
-      </div>
-    </div>
-    <div style="grid-row:1;grid-column:4"></div>
-    <div class="names-col right" id="col-dog-r" style="grid-row:1;grid-column:5"></div>
-
-    <!-- Row 2: «Тысячеглазый» + shared + «...ничтоже» -->
-    <div class="names-col left"   id="col-l" style="grid-row:2;grid-column:1"></div>
-    <div class="poem-cell" style="grid-row:2;grid-column:2">
-      <div class="poem-box left" id="poem-l">
-        <div class="poem-title">«Тысячеглазый»</div>
-        <div class="poem-year">2026</div>
-        <div class="poem-idea">быть всем и не знать себя</div>
-      </div>
-    </div>
-    <div class="names-col shared" id="col-s" style="grid-row:2;grid-column:3"></div>
-    <div class="poem-cell" style="grid-row:2;grid-column:4">
-      <div class="poem-box right" id="poem-r">
-        <div class="poem-title">«... и҆ ничто́же невозмо́жно бꙋ́детъ ва́мъ»</div>
-        <div class="poem-year">2026</div>
-        <div class="poem-idea">несу в себе начало всех начал</div>
-      </div>
-    </div>
-    <div class="names-col right"  id="col-r" style="grid-row:2;grid-column:5"></div>
-
-    <!-- Row 3: «Дерево» (центр) -->
-    <div class="names-col left"  id="col-tree-l" style="grid-row:3;grid-column:1"></div>
-    <div style="grid-row:3;grid-column:2"></div>
-    <div class="poem-cell" style="grid-row:3;grid-column:3">
-      <div class="poem-box tree" id="poem-t">
-        <div class="poem-title">«Дерево»</div>
-        <div class="poem-year">2025–2026</div>
-        <div class="poem-idea">не дерево в тумане — в дереве туман</div>
-      </div>
-    </div>
-    <div style="grid-row:3;grid-column:4"></div>
-    <div class="names-col right" id="col-tree-r" style="grid-row:3;grid-column:5"></div>
-
+    <div class="poems-col" id="poems-col"></div>
+    <div></div>
+    <div class="names-col" id="names-col"></div>
   </div>
 </div>
 
 <div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:#6B3A4A"></div>«Черноглазый пёс»</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#4270A8"></div>«Тысячеглазый»</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#6A5088"></div>«Тысячеглазый» + «...ничтоже»</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#8C5A36"></div>«...ничтоже»</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#3D6B4A"></div>«Дерево»</div>
-  <div class="legend-item">
-    <svg width="22" height="10" style="flex-shrink:0" aria-hidden="true">
-      <path d="M1,5 L21,5" stroke="#8A7B6A" stroke-width="1.3" stroke-dasharray="5,3" fill="none"/>
-    </svg>
-    одна мысль в разных поэмах
-  </div>
+  <div class="legend-item"><div class="leg-dot" style="background:#4270A8"></div>«Тысячеглазый»</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#8C5A36"></div>«...ничтоже»</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#6B3A4A"></div>«Черноглазый пёс»</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#3D6B4A"></div>«Дерево»</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#4A7A8A"></div>«Чёрный дрозд»</div>
+  <p class="legend-note">имена в нескольких поэмах получают кривые разных цветов</p>
 </div>
 
 <script>
-var DL = [
-  {name:'Юнг',       tag:'тень — непризнанное «я»'},
-  {name:'Данте',     tag:'ров без ступеней вверх'},
-  {name:'Черчилль',  tag:'пёс приходит без приглашения'},
-  {name:'Кьеркегор', tag:'отчаяние парализует'},
-  {name:'Ницше',     tag:'круг, который изматывает'}
-];
-var DR = [
-  {name:'Псалмы',     tag:'вопль в пустоту'},
-  {name:'Книга Иова', tag:'тишина в ответ на вопрос'},
-  {name:'Буддизм',    tag:'сансара — круг страдания'},
-  {name:'Ник Дрейк',  tag:'пёс знает твоё имя'},
-  {name:'Беккет',     tag:'движение без движения'}
-];
-var L = [
-  {name:'Парменид',                   tag:'истина не в явлениях'},
-  {name:'Эмпедокл',                   tag:'стихии и борьба в нас'},
-  {name:'Гераклит',                   tag:'скрытый логос за борьбой'},
-  {name:'Лейбниц',                    tag:'каждый глаз отражает всё'},
-  {name:'Николай Кузанский',          tag:'бесконечное совпадает с точкой'},
-  {name:'Мартин Бубер',               tag:'я рождается во встрече'},
-  {name:'Упанишады / Рамана Махарши', tag:'кто остаётся за формами'},
-  {name:'Борхес',                     tag:'всё разом — синтез невозможен'},
-  {name:'Уитмен',                     tag:'я содержу в себе множества'},
-  {name:'Пессоа',                     tag:'каждое я реально и полно'},
-  {name:'Чжуанцзы',                   tag:'кто я: человек или бабочка'},
-  {name:'Аватамсака / Сеть Индры',    tag:'каждая точка отражает весь мир'},
-  {name:'Кальдерон де ла Барка',      tag:'жизнь — сон, но кто снится'}
-];
-var S = [
-  {name:'Платон',         tag:'апория как порог познания'},
-  {name:'Плотин',         tag:'из единого — и к единому'},
-  {name:'Мейстер Экхарт', tag:'основа души = основа бога'},
-  {name:'Гегель',         tag:'мышление открывает основу бытия'}
-];
-var R = [
-  {name:'Евангелие от Матфея',       tag:'вера сдвигает горы'},
-  {name:'Евангелие от Иоанна',       tag:'зерно умирает — плод живёт'},
-  {name:'Экклезиаст',                tag:'тщетность как отправная точка'},
-  {name:'Пророк Илия',               tag:'глас безмолвный после бури'},
-  {name:'Аристотель',                tag:'плод несёт в себе причину'},
-  {name:'Августин',                  tag:'источник — в тебе самом'},
-  {name:'Григорий Палама (исихазм)', tag:'нетварный свет — внутри'},
-  {name:'Спиноза',                   tag:'несу в себе свою причину'},
-  {name:'Кант',                      tag:'за чувственным — умопостигаемое'},
-  {name:'Фихте',                     tag:'препятствие как условие роста'},
-  {name:'Шеллинг',                   tag:'вечность видит себя через нас'},
-  {name:'Дионисий Ареопагит',        tag:'бог познаётся через отрицание'}
-];
-var TL = [
-  {name:'Платон',    tag:'клетка как пещера'},
-  {name:'Кант',      tag:'клетка задаёт всю оптику'},
-  {name:'Гегель',    tag:'я сам себя же отрицаю'},
-  {name:'Хайдеггер', tag:'рулевой не знает себя'},
-  {name:'Юнг',       tag:'индивидуация — путь к Самости'},
-  {name:'Ницше',     tag:'погоня за собственным хвостом'}
-];
-var TR = [
-  {name:'Сартр',         tag:'если сам не освобожу — кто?'},
-  {name:'Экхарт / Илия', tag:'Безмолвный Голос — тождество'},
-  {name:'Буддизм',       tag:'проснулся рулевой'},
-  {name:'Гельдерлин',    tag:'где опасность — там спасительное'},
-  {name:'Феникс',        tag:'сам себя сжигает'},
-  {name:'Пиндар',        tag:'стань тем, кто ты есть'}
+var POEMS = [
+  {id:'p-tysy',  title:'«Тысячеглазый»',                                  year:'2026', idea:'быть всем и не знать себя'},
+  {id:'p-nic',   title:'«… и҆ ничто́же невозмо́жно бꙋ́детъ ва́мъ»',        year:'2026', idea:'несу в себе начало всех начал'},
+  {id:'p-dog',   title:'«Боль черноглазого пса»',                         year:'2026', idea:'тьма входит сама — и уходит сама'},
+  {id:'p-tree',  title:'«Дерево»',                                         year:'2026', idea:'не дерево в тумане — в дереве туман'},
+  {id:'p-drozd', title:'«Чёрный дрозд и собирательница ягод на болоте»',  year:'2025', idea:'камень — ответ на свет'}
 ];
 
-function populate(id, items, cls) {
-  var col = document.getElementById(id);
-  items.forEach(function(item) {
-    var el = document.createElement('span');
-    el.className = 'pill ' + cls;
-    el.dataset.name = item.name;
-    var nm = document.createElement('span');
-    nm.className = 'pill-name';
-    nm.textContent = item.name;
-    el.appendChild(nm);
-    if (item.tag) {
-      var tg = document.createElement('span');
-      tg.className = 'pill-tag';
-      tg.textContent = item.tag;
-      el.appendChild(tg);
-    }
-    col.appendChild(el);
+var GROUPS = [
+  [
+    {id:'n-avg',     name:'Августин',                   tag:'источник — в тебе самом'},
+    {id:'n-indra',   name:'Аватамсака / Сеть Индры',    tag:'каждая точка отражает весь мир'},
+    {id:'n-arist',   name:'Аристотель',                 tag:'плод несёт в себе причину'},
+    {id:'n-beck',    name:'Беккет',                     tag:'движение без движения'},
+    {id:'n-borh',    name:'Борхес',                     tag:'всё разом — синтез невозможен'},
+    {id:'n-buddh',   name:'Буддизм',                    tag:'сансара, пробуждение, бодхисаттва'},
+    {id:'n-hegel',   name:'Гегель',                     tag:'мышление открывает основу бытия'},
+    {id:'n-hoelder', name:'Гельдерлин',                 tag:'где опасность — там спасительное'},
+    {id:'n-herakl',  name:'Гераклит',                   tag:'скрытый логос за борьбой'},
+    {id:'n-gorac',   name:'Гораций',                    tag:'начни с сути, а не с яйца'},
+    {id:'n-pal',     name:'Григорий Палама',            tag:'нетварный свет — внутри'},
+    {id:'n-dante',   name:'Данте',                      tag:'ров без ступеней вверх'},
+    {id:'n-dion',    name:'Дионисий Ареопагит',         tag:'бог познаётся через отрицание'},
+    {id:'n-dost',    name:'Достоевский',                tag:'знает — и всё равно не действует'},
+    {id:'n-ioann',   name:'Евангелие от Иоанна',        tag:'зерно умирает — плод живёт'},
+    {id:'n-mat',     name:'Евангелие от Матфея',        tag:'вера сдвигает горы'},
+    {id:'n-calder',  name:'Кальдерон де ла Барка',      tag:'жизнь — сон, но кто снится'},
+    {id:'n-kant',    name:'Кант',                       tag:'за чувственным — умопостигаемое'},
+    {id:'n-celtic',  name:'Кельтская традиция',         tag:'чёрный дрозд — вестник из света'},
+    {id:'n-iov',     name:'Книга Иова',                 tag:'тишина в ответ на вопрос'},
+    {id:'n-kier',    name:'Кьеркегор',                  tag:'отчаяние парализует'},
+    {id:'n-leibn',   name:'Лейбниц',                    tag:'каждый глаз отражает всё'},
+    {id:'n-buber',   name:'Мартин Бубер',               tag:'я рождается во встрече'},
+    {id:'n-ekhart',  name:'Мейстер Экхарт',             tag:'основа души = основа бога'},
+    {id:'n-drake',   name:'Ник Дрейк',                  tag:'пёс знает твоё имя'},
+    {id:'n-kuz',     name:'Николай Кузанский',          tag:'бесконечное совпадает с точкой'},
+    {id:'n-nietz',   name:'Ницше',                      tag:'круг, который изматывает'},
+    {id:'n-parm',    name:'Парменид',                   tag:'истина не в явлениях'},
+    {id:'n-pess',    name:'Пессоа',                     tag:'каждое я реально и полно'},
+    {id:'n-pindar',  name:'Пиндар',                     tag:'стань тем, кто ты есть'},
+    {id:'n-platon',  name:'Платон',                     tag:'апория как порог познания'},
+    {id:'n-plotin',  name:'Плотин',                     tag:'из единого — и к единому'},
+    {id:'n-ilya',    name:'Пророк Илия',                tag:'глас безмолвный после бури'},
+    {id:'n-psalms',  name:'Псалмы',                     tag:'вопль в пустоту'},
+    {id:'n-rilke',   name:'Рильке',                     tag:'встреча требует ответа всем существом'},
+    {id:'n-sartr',   name:'Сартр',                      tag:'если сам не освобожу — кто?'},
+    {id:'n-solit',   name:'Солитоны',                   tag:'форма сохраняется сквозь столкновения'},
+    {id:'n-spin',    name:'Спиноза',                    tag:'несу в себе свою причину'},
+    {id:'n-stoic',   name:'Стоицизм / Эпиктет',        tag:'власть над собой, не над волнами'},
+    {id:'n-blake',   name:'Уильям Блейк',               tag:'умственные кандалы куёт сам человек'},
+    {id:'n-whitm',   name:'Уитмен',                     tag:'я содержу в себе множества'},
+    {id:'n-upan',    name:'Упанишады / Рамана Махарши', tag:'кто остаётся за формами'},
+    {id:'n-feniks',  name:'Феникс',                     tag:'сам себя сжигает'},
+    {id:'n-ficht',   name:'Фихте',                      tag:'препятствие как условие роста'},
+    {id:'n-heideg',  name:'Хайдеггер',                  tag:'рулевой не знает себя'},
+    {id:'n-church',  name:'Черчилль',                   tag:'пёс приходит без приглашения'},
+    {id:'n-zhuang',  name:'Чжуанцзы',                   tag:'кто я: человек или бабочка'},
+    {id:'n-shell',   name:'Шеллинг',                    tag:'вечность видит себя через нас'},
+    {id:'n-ekk',     name:'Экклезиаст',                 tag:'тщетность как отправная точка'},
+    {id:'n-ekh-il',  name:'Экхарт / Илия',              tag:'Безмолвный Голос — тождество'},
+    {id:'n-emp',     name:'Эмпедокл',                   tag:'стихии и борьба в нас'},
+    {id:'n-yung',    name:'Юнг',                        tag:'тень — непризнанное «я»'}
+  ]
+];
+
+var CONNS = [
+  /* Черноглазый пёс — 11 */
+  ['p-dog','n-yung',   '#6B3A4A'], ['p-dog','n-dante',  '#6B3A4A'],
+  ['p-dog','n-arist',  '#6B3A4A'], ['p-dog','n-church', '#6B3A4A'],
+  ['p-dog','n-kier',   '#6B3A4A'], ['p-dog','n-nietz',  '#6B3A4A'],
+  ['p-dog','n-psalms', '#6B3A4A'], ['p-dog','n-iov',    '#6B3A4A'],
+  ['p-dog','n-buddh',  '#6B3A4A'], ['p-dog','n-drake',  '#6B3A4A'],
+  ['p-dog','n-beck',   '#6B3A4A'],
+  /* Тысячеглазый — 17 */
+  ['p-tysy','n-parm',   '#4270A8'], ['p-tysy','n-emp',    '#4270A8'],
+  ['p-tysy','n-herakl', '#4270A8'], ['p-tysy','n-platon', '#4270A8'],
+  ['p-tysy','n-leibn',  '#4270A8'], ['p-tysy','n-kuz',    '#4270A8'],
+  ['p-tysy','n-plotin', '#4270A8'], ['p-tysy','n-hegel',  '#4270A8'],
+  ['p-tysy','n-buber',  '#4270A8'], ['p-tysy','n-ekhart', '#4270A8'],
+  ['p-tysy','n-upan',   '#4270A8'], ['p-tysy','n-borh',   '#4270A8'],
+  ['p-tysy','n-whitm',  '#4270A8'], ['p-tysy','n-pess',   '#4270A8'],
+  ['p-tysy','n-zhuang', '#4270A8'], ['p-tysy','n-indra',  '#4270A8'],
+  ['p-tysy','n-calder', '#4270A8'],
+  /* …ничтоже — 16 */
+  ['p-nic','n-mat',    '#8C5A36'], ['p-nic','n-ioann',  '#8C5A36'],
+  ['p-nic','n-ekk',    '#8C5A36'], ['p-nic','n-ilya',   '#8C5A36'],
+  ['p-nic','n-platon', '#8C5A36'], ['p-nic','n-arist',  '#8C5A36'],
+  ['p-nic','n-plotin', '#8C5A36'], ['p-nic','n-avg',    '#8C5A36'],
+  ['p-nic','n-ekhart', '#8C5A36'], ['p-nic','n-pal',    '#8C5A36'],
+  ['p-nic','n-spin',   '#8C5A36'], ['p-nic','n-kant',   '#8C5A36'],
+  ['p-nic','n-ficht',  '#8C5A36'], ['p-nic','n-hegel',  '#8C5A36'],
+  ['p-nic','n-shell',  '#8C5A36'], ['p-nic','n-dion',   '#8C5A36'],
+  /* Дерево — 18 */
+  ['p-tree','n-platon',  '#3D6B4A'], ['p-tree','n-kant',    '#3D6B4A'],
+  ['p-tree','n-hegel',   '#3D6B4A'], ['p-tree','n-heideg',  '#3D6B4A'],
+  ['p-tree','n-yung',    '#3D6B4A'], ['p-tree','n-nietz',   '#3D6B4A'],
+  ['p-tree','n-sartr',   '#3D6B4A'], ['p-tree','n-blake',   '#3D6B4A'],
+  ['p-tree','n-dost',    '#3D6B4A'], ['p-tree','n-pindar',  '#3D6B4A'],
+  ['p-tree','n-ekh-il',  '#3D6B4A'], ['p-tree','n-buddh',   '#3D6B4A'],
+  ['p-tree','n-gorac',   '#3D6B4A'], ['p-tree','n-feniks',  '#3D6B4A'],
+  ['p-tree','n-solit',   '#3D6B4A'], ['p-tree','n-hoelder', '#3D6B4A'],
+  ['p-tree','n-stoic',   '#3D6B4A'], ['p-tree','n-rilke',   '#3D6B4A'],
+  /* Чёрный дрозд — 10 */
+  ['p-drozd','n-mat',    '#4A7A8A'], ['p-drozd','n-iov',    '#4A7A8A'],
+  ['p-drozd','n-platon', '#4A7A8A'], ['p-drozd','n-yung',   '#4A7A8A'],
+  ['p-drozd','n-stoic',  '#4A7A8A'], ['p-drozd','n-sartr',  '#4A7A8A'],
+  ['p-drozd','n-buddh',  '#4A7A8A'], ['p-drozd','n-rilke',  '#4A7A8A'],
+  ['p-drozd','n-pal',    '#4A7A8A'], ['p-drozd','n-celtic', '#4A7A8A']
+];
+
+var locked = null;
+
+var poemConns = {}, nameConns = {};
+CONNS.forEach(function(c) {
+  if (!poemConns[c[0]]) poemConns[c[0]] = [];
+  poemConns[c[0]].push(c[1]);
+  if (!nameConns[c[1]]) nameConns[c[1]] = [];
+  nameConns[c[1]].push(c[0]);
+});
+
+var poemsCol = document.getElementById('poems-col');
+POEMS.forEach(function(p) {
+  var box = document.createElement('div');
+  box.className = 'poem-box';
+  box.dataset.pid = p.id;
+  box.innerHTML =
+    '<div class="poem-title">'+p.title+'</div>'+
+    '<div class="poem-year">'+p.year+'</div>'+
+    '<div class="poem-idea">'+p.idea+'</div>';
+  box.addEventListener('mouseenter', function() { if (!locked) highlightPoem(p.id); });
+  box.addEventListener('mouseleave',  function() { if (!locked) resetAll(); });
+  box.addEventListener('click', function() {
+    if (locked && locked.type === 'poem' && locked.id === p.id) { locked = null; resetAll(); }
+    else { locked = {type:'poem', id:p.id}; highlightPoem(p.id); }
   });
-}
-populate('col-dog-l',  DL, 'dog');
-populate('col-dog-r',  DR, 'dog');
-populate('col-l',       L, 'left');
-populate('col-s',       S, 'shared');
-populate('col-r',       R, 'right');
-populate('col-tree-l', TL, 'tree');
-populate('col-tree-r', TR, 'tree');
+  poemsCol.appendChild(box);
+});
 
-var tid;
-function draw() { clearTimeout(tid); tid = setTimeout(_draw, 60); }
+var namesCol = document.getElementById('names-col');
+GROUPS.forEach(function(grp) {
+  var g = document.createElement('div');
+  g.className = 'name-group';
+  grp.forEach(function(n) {
+    var el = document.createElement('div');
+    el.className = 'name-node';
+    el.dataset.nid = n.id;
+    el.innerHTML = '<span class="n-name">'+n.name+'</span><span class="n-tag">'+n.tag+'</span>';
+    el.addEventListener('mouseenter', function() { if (!locked) highlightName(n.id); });
+    el.addEventListener('mouseleave',  function() { if (!locked) resetAll(); });
+    el.addEventListener('click', function() {
+      if (locked && locked.type === 'name' && locked.id === n.id) { locked = null; resetAll(); }
+      else { locked = {type:'name', id:n.id}; highlightName(n.id); }
+    });
+    g.appendChild(el);
+  });
+  namesCol.appendChild(g);
+});
 
-function _draw() {
+var paths = [];
+
+function draw() {
   var svg = document.getElementById('connections');
   var wrap = document.querySelector('.graph-wrapper');
   var wR = wrap.getBoundingClientRect();
-  svg.setAttribute('width',  wrap.offsetWidth);
+  svg.setAttribute('width', wrap.offsetWidth);
   svg.setAttribute('height', wrap.offsetHeight);
   svg.innerHTML = '';
-
-  /* Arrowhead markers */
-  var defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
-  [
-    ['ad','rgba(107,58,74,0.68)'],
-    ['al','rgba(66,112,168,0.68)'],
-    ['ar','rgba(140,90,54,0.68)'],
-    ['at','rgba(61,107,74,0.68)'],
-    ['as','rgba(106,80,136,0.68)']
-  ].forEach(function(pair) {
-    var mk = document.createElementNS('http://www.w3.org/2000/svg','marker');
-    mk.setAttribute('id', pair[0]);
-    mk.setAttribute('markerWidth','7'); mk.setAttribute('markerHeight','7');
-    mk.setAttribute('refX','6'); mk.setAttribute('refY','3.5');
-    mk.setAttribute('orient','auto');
-    var pt = document.createElementNS('http://www.w3.org/2000/svg','path');
-    pt.setAttribute('d','M0,0.5 L0,6.5 L6,3.5 z');
-    pt.setAttribute('fill', pair[1]);
-    mk.appendChild(pt); defs.appendChild(mk);
-  });
-  svg.appendChild(defs);
+  paths = [];
 
   function rel(el) {
     var r = el.getBoundingClientRect();
     return {
-      left:   r.left   - wR.left,
-      right:  r.right  - wR.left,
-      top:    r.top    - wR.top,
-      bottom: r.bottom - wR.top,
-      cy:     r.top - wR.top + r.height / 2
+      left:  r.left  - wR.left,
+      right: r.right - wR.left,
+      cy:    r.top   - wR.top + r.height / 2
     };
   }
 
-  function arc(x1, y1, x2, y2, stroke, marker) {
-    var p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  CONNS.forEach(function(c) {
+    var poem = document.querySelector('[data-pid="'+c[0]+'"]');
+    var node = document.querySelector('[data-nid="'+c[1]+'"]');
+    if (!poem || !node) return;
+    var pR = rel(poem), nR = rel(node);
+    var x1 = pR.right, y1 = pR.cy;
+    var x2 = nR.left,  y2 = nR.cy;
     var mx = (x1 + x2) / 2;
+    var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     p.setAttribute('d', 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2);
-    p.setAttribute('stroke', stroke);
-    p.setAttribute('stroke-width', '1.25');
-    p.setAttribute('fill', 'none');
-    p.setAttribute('marker-end', 'url(#'+marker+')');
-    svg.appendChild(p);
-  }
-
-  var pD = rel(document.getElementById('poem-d'));
-  var pL = rel(document.getElementById('poem-l'));
-  var pR = rel(document.getElementById('poem-r'));
-  var pT = rel(document.getElementById('poem-t'));
-
-  /* «Черноглазый пёс» — левые → poem-d */
-  var dLPills = Array.from(document.querySelectorAll('#col-dog-l .pill'));
-  dLPills.forEach(function(el, i) {
-    var r = rel(el);
-    var t = dLPills.length > 1 ? i / (dLPills.length - 1) : 0.5;
-    arc(r.right, r.cy, pD.left, pD.top + (pD.bottom-pD.top)*(0.08+t*0.84), 'rgba(107,58,74,0.22)', 'ad');
-  });
-  /* «Черноглазый пёс» — правые → poem-d */
-  var dRPills = Array.from(document.querySelectorAll('#col-dog-r .pill'));
-  dRPills.forEach(function(el, i) {
-    var r = rel(el);
-    var t = dRPills.length > 1 ? i / (dRPills.length - 1) : 0.5;
-    arc(r.left, r.cy, pD.right, pD.top + (pD.bottom-pD.top)*(0.08+t*0.84), 'rgba(107,58,74,0.22)', 'ad');
-  });
-
-  /* «Тысячеглазый» — левые → poem-l */
-  var lPills = Array.from(document.querySelectorAll('#col-l .pill'));
-  lPills.forEach(function(el, i) {
-    var r = rel(el);
-    var t = lPills.length > 1 ? i / (lPills.length - 1) : 0.5;
-    arc(r.right, r.cy, pL.left, pL.top + (pL.bottom-pL.top)*(0.08+t*0.84), 'rgba(66,112,168,0.22)', 'al');
-  });
-  /* Shared → poem-l и poem-r */
-  var sPills = Array.from(document.querySelectorAll('#col-s .pill'));
-  sPills.forEach(function(el, i) {
-    var r = rel(el);
-    var t = sPills.length > 1 ? i / (sPills.length - 1) : 0.5;
-    arc(r.left,  r.cy, pL.right, pL.top+(pL.bottom-pL.top)*(0.28+t*0.44), 'rgba(106,80,136,0.28)', 'as');
-    arc(r.right, r.cy, pR.left,  pR.top+(pR.bottom-pR.top)*(0.28+t*0.44), 'rgba(106,80,136,0.28)', 'as');
-  });
-  /* «...ничтоже» — правые → poem-r */
-  var rPills = Array.from(document.querySelectorAll('#col-r .pill'));
-  rPills.forEach(function(el, i) {
-    var r = rel(el);
-    var t = rPills.length > 1 ? i / (rPills.length - 1) : 0.5;
-    arc(r.left, r.cy, pR.right, pR.top + (pR.bottom-pR.top)*(0.08+t*0.84), 'rgba(140,90,54,0.22)', 'ar');
-  });
-
-  /* «Дерево» — левые → poem-t */
-  var tLPills = Array.from(document.querySelectorAll('#col-tree-l .pill'));
-  tLPills.forEach(function(el, i) {
-    var r = rel(el);
-    var t = tLPills.length > 1 ? i / (tLPills.length - 1) : 0.5;
-    arc(r.right, r.cy, pT.left, pT.top + (pT.bottom-pT.top)*(0.08+t*0.84), 'rgba(61,107,74,0.22)', 'at');
-  });
-  /* «Дерево» — правые → poem-t */
-  var tRPills = Array.from(document.querySelectorAll('#col-tree-r .pill'));
-  tRPills.forEach(function(el, i) {
-    var r = rel(el);
-    var t = tRPills.length > 1 ? i / (tRPills.length - 1) : 0.5;
-    arc(r.left, r.cy, pT.right, pT.top + (pT.bottom-pT.top)*(0.08+t*0.84), 'rgba(61,107,74,0.22)', 'at');
-  });
-
-  /* ── Пересечения мыслей между поэмами (пунктир) ─────────────────── */
-
-  function findPill(colId, name) {
-    var pills = Array.from(document.querySelectorAll('#' + colId + ' .pill'));
-    for (var i = 0; i < pills.length; i++) {
-      if (pills[i].dataset.name === name) return pills[i];
-    }
-    return null;
-  }
-
-  function dashArc(el1, side1, el2, side2, xOffset) {
-    var r1 = rel(el1), r2 = rel(el2);
-    var x1 = side1 === 'r' ? r1.right : r1.left;
-    var x2 = side2 === 'r' ? r2.right : r2.left;
-    var y1 = r1.cy, y2 = r2.cy;
-    var p = document.createElementNS('http://www.w3.org/2000/svg','path');
-    var d;
-    if (xOffset) {
-      /* Same-side vertical arc — bulge outward */
-      d = 'M'+x1+','+y1+' C'+(x1+xOffset)+','+y1+' '+(x2+xOffset)+','+y2+' '+x2+','+y2;
-    } else {
-      /* Diagonal arc — standard bezier */
-      var mx = (x1 + x2) / 2;
-      d = 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2;
-    }
-    p.setAttribute('d', d);
-    p.setAttribute('stroke', 'rgba(110,100,88,0.5)');
+    p.setAttribute('stroke', c[2]);
     p.setAttribute('stroke-width', '1.2');
     p.setAttribute('fill', 'none');
-    p.setAttribute('stroke-dasharray', '5,3');
+    p.setAttribute('opacity', '0.18');
+    p.dataset.poem = c[0];
+    p.dataset.name = c[1];
     svg.appendChild(p);
+    paths.push(p);
+  });
+}
+
+function highlightPoem(pid) {
+  var names = new Set(poemConns[pid] || []);
+  document.querySelectorAll('.name-node').forEach(function(el) {
+    el.classList.toggle('faded', !names.has(el.dataset.nid));
+  });
+  document.querySelectorAll('.poem-box').forEach(function(el) {
+    el.classList.toggle('faded', el.dataset.pid !== pid);
+  });
+  paths.forEach(function(p) {
+    p.setAttribute('opacity', p.dataset.poem === pid ? '0.7' : '0.03');
+  });
+}
+
+function highlightName(nid) {
+  var poems = new Set(nameConns[nid] || []);
+  document.querySelectorAll('.poem-box').forEach(function(el) {
+    el.classList.toggle('faded', !poems.has(el.dataset.pid));
+  });
+  document.querySelectorAll('.name-node').forEach(function(el) {
+    el.classList.toggle('faded', el.dataset.nid !== nid);
+  });
+  paths.forEach(function(p) {
+    p.setAttribute('opacity', p.dataset.name === nid ? '0.7' : '0.03');
+  });
+}
+
+function resetAll() {
+  document.querySelectorAll('.poem-box, .name-node').forEach(function(el) {
+    el.classList.remove('faded');
+  });
+  paths.forEach(function(p) { p.setAttribute('opacity', '0.18'); });
+}
+
+function toggleTheme() {
+  var root = document.documentElement;
+  var cur = root.getAttribute('data-theme');
+  if (!cur) {
+    var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  } else {
+    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
   }
-
-  /* 1. Гегель — Aufhebung: shared(row2) → Дерево-left(row3) */
-  var hegelS = findPill('col-s',      'Гегель');
-  var hegelT = findPill('col-tree-l', 'Гегель');
-  if (hegelS && hegelT) dashArc(hegelS, 'l', hegelT, 'r', null);
-
-  /* 2. Буддизм — колесо/сансара: Черноглазый-right(row1) → Дерево-right(row3) */
-  var buddhaD = findPill('col-dog-r',  'Буддизм');
-  var buddhaT = findPill('col-tree-r', 'Буддизм');
-  if (buddhaD && buddhaT) dashArc(buddhaD, 'r', buddhaT, 'r', 38);
-
-  /* 3. Безмолвный Голос: Ничтоже-right(row2) → Дерево-right(row3) */
-  var iliaR = findPill('col-r',      'Пророк Илия');
-  var ekhtT = findPill('col-tree-r', 'Экхарт / Илия');
-  if (iliaR && ekhtT) dashArc(iliaR, 'r', ekhtT, 'r', 22);
+  setTimeout(draw, 50);
 }
 
 window.addEventListener('load', draw);
