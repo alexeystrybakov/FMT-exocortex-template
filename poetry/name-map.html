@@ -86,11 +86,12 @@ body {
   cursor: default;
   transition: opacity 0.18s;
 }
-.poem-box[data-pid="p-dog"]   { background: #6B3A4A; }
 .poem-box[data-pid="p-tysy"]  { background: #4270A8; }
 .poem-box[data-pid="p-nic"]   { background: #8C5A36; }
+.poem-box[data-pid="p-dog"]   { background: #6B3A4A; }
 .poem-box[data-pid="p-tree"]  { background: #3D6B4A; }
 .poem-box[data-pid="p-drozd"] { background: #4A7A8A; }
+.poem-box[data-pid="p-song"]  { background: #7B6B9A; }
 .poem-title {
   color: #fff;
   font-style: italic;
@@ -194,6 +195,7 @@ body {
   <div class="legend-item"><div class="leg-dot" style="background:#6B3A4A"></div>«Черноглазый пёс»</div>
   <div class="legend-item"><div class="leg-dot" style="background:#3D6B4A"></div>«Дерево»</div>
   <div class="legend-item"><div class="leg-dot" style="background:#4A7A8A"></div>«Чёрный дрозд»</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#7B6B9A"></div>«Песня вечного дыхания»</div>
   <p class="legend-note">имена в нескольких поэмах получают кривые разных цветов</p>
 </div>
 
@@ -203,7 +205,8 @@ var POEMS = [
   {id:'p-nic',   title:'«… и҆ ничто́же невозмо́жно бꙋ́детъ ва́мъ»',        year:'2026', idea:'несу в себе начало всех начал'},
   {id:'p-dog',   title:'«Боль черноглазого пса»',                         year:'2026', idea:'тьма входит сама — и уходит сама'},
   {id:'p-tree',  title:'«Дерево»',                                         year:'2026', idea:'не дерево в тумане — в дереве туман'},
-  {id:'p-drozd', title:'«Чёрный дрозд и собирательница ягод на болоте»',  year:'2025', idea:'камень — ответ на свет'}
+  {id:'p-drozd', title:'«Чёрный дрозд и собирательница ягод на болоте»',  year:'2025', idea:'камень — ответ на свет'},
+  {id:'p-song',  title:'«Песня вечного дыхания»',                         year:'2025', idea:'все мы дыхания моменты'}
 ];
 
 var GROUPS = [
@@ -243,6 +246,7 @@ var GROUPS = [
     {id:'n-ilya',    name:'Пророк Илия',                tag:'глас безмолвный после бури'},
     {id:'n-psalms',  name:'Псалмы',                     tag:'вопль в пустоту'},
     {id:'n-rilke',   name:'Рильке',                     tag:'встреча требует ответа всем существом'},
+    {id:'n-rumi',    name:'Руми',                       tag:'капля растворяется в океане Бога'},
     {id:'n-sartr',   name:'Сартр',                      tag:'если сам не освобожу — кто?'},
     {id:'n-solit',   name:'Солитоны',                   tag:'форма сохраняется сквозь столкновения'},
     {id:'n-spin',    name:'Спиноза',                    tag:'несу в себе свою причину'},
@@ -305,7 +309,14 @@ var CONNS = [
   ['p-drozd','n-platon', '#4A7A8A'], ['p-drozd','n-yung',   '#4A7A8A'],
   ['p-drozd','n-stoic',  '#4A7A8A'], ['p-drozd','n-sartr',  '#4A7A8A'],
   ['p-drozd','n-buddh',  '#4A7A8A'], ['p-drozd','n-rilke',  '#4A7A8A'],
-  ['p-drozd','n-pal',    '#4A7A8A'], ['p-drozd','n-celtic', '#4A7A8A']
+  ['p-drozd','n-pal',    '#4A7A8A'], ['p-drozd','n-celtic', '#4A7A8A'],
+  /* Песня вечного дыхания — 12 */
+  ['p-song','n-ekk',    '#7B6B9A'], ['p-song','n-hegel',  '#7B6B9A'],
+  ['p-song','n-plotin', '#7B6B9A'], ['p-song','n-rumi',   '#7B6B9A'],
+  ['p-song','n-herakl', '#7B6B9A'], ['p-song','n-upan',   '#7B6B9A'],
+  ['p-song','n-ficht',  '#7B6B9A'], ['p-song','n-indra',  '#7B6B9A'],
+  ['p-song','n-ekhart', '#7B6B9A'], ['p-song','n-ioann',  '#7B6B9A'],
+  ['p-song','n-shell',  '#7B6B9A'], ['p-song','n-kuz',    '#7B6B9A']
 ];
 
 var locked = null;
