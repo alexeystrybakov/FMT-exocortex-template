@@ -92,6 +92,7 @@ body {
 .poem-box[data-pid="p-tree"]  { background: #3D6B4A; }
 .poem-box[data-pid="p-drozd"] { background: #4A7A8A; }
 .poem-box[data-pid="p-song"]  { background: #7B6B9A; }
+.poem-box[data-pid="p-hope"]  { background: #8A6040; }
 .poem-title {
   color: #fff;
   font-style: italic;
@@ -196,6 +197,7 @@ body {
   <div class="legend-item"><div class="leg-dot" style="background:#3D6B4A"></div>«Дерево»</div>
   <div class="legend-item"><div class="leg-dot" style="background:#4A7A8A"></div>«Чёрный дрозд»</div>
   <div class="legend-item"><div class="leg-dot" style="background:#7B6B9A"></div>«Песня вечного дыхания»</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#8A6040"></div>«Надежда»</div>
   <p class="legend-note">имена в нескольких поэмах получают кривые разных цветов</p>
 </div>
 
@@ -206,13 +208,15 @@ var POEMS = [
   {id:'p-dog',   title:'«Боль черноглазого пса»',                         year:'2026', idea:'тьма входит сама — и уходит сама'},
   {id:'p-tree',  title:'«Дерево»',                                         year:'2026', idea:'не дерево в тумане — в дереве туман'},
   {id:'p-drozd', title:'«Чёрный дрозд и собирательница ягод на болоте»',  year:'2025', idea:'камень — ответ на свет'},
-  {id:'p-song',  title:'«Песня вечного дыхания»',                         year:'2025', idea:'все мы дыхания моменты'}
+  {id:'p-song',  title:'«Песня вечного дыхания»',                         year:'2025', idea:'все мы дыхания моменты'},
+  {id:'p-hope',  title:'«Надежда»',                                         year:'2024', idea:'надежду убил — а она вернулась'}
 ];
 
 var GROUPS = [
   [
     {id:'n-avg',     name:'Августин',                   tag:'источник — в тебе самом'},
     {id:'n-indra',   name:'Аватамсака / Сеть Индры',    tag:'каждая точка отражает весь мир'},
+    {id:'n-pavel',   name:'Апостол Павел',              tag:'агапе не мыслит зла и не ведёт счёт'},
     {id:'n-arist',   name:'Аристотель',                 tag:'плод несёт в себе причину'},
     {id:'n-beck',    name:'Беккет',                     tag:'движение без движения'},
     {id:'n-borh',    name:'Борхес',                     tag:'всё разом — синтез невозможен'},
@@ -220,13 +224,18 @@ var GROUPS = [
     {id:'n-hegel',   name:'Гегель',                     tag:'мышление открывает основу бытия'},
     {id:'n-hoelder', name:'Гельдерлин',                 tag:'где опасность — там спасительное'},
     {id:'n-herakl',  name:'Гераклит',                   tag:'скрытый логос за борьбой'},
+    {id:'n-hermes',  name:'Аргус и Гермес',             tag:'рассказ усыпляет тысячу глаз'},
+    {id:'n-gesid',   name:'Гесиод',                     tag:'надежда на дне ящика — последняя или первая?'},
     {id:'n-gorac',   name:'Гораций',                    tag:'начни с сути, а не с яйца'},
     {id:'n-pal',     name:'Григорий Палама',            tag:'нетварный свет — внутри'},
     {id:'n-dante',   name:'Данте',                      tag:'ров без ступеней вверх'},
+    {id:'n-dikin',   name:'Дикинсон',                   tag:'надежду убить нельзя — она поёт в бурю'},
     {id:'n-dion',    name:'Дионисий Ареопагит',         tag:'бог познаётся через отрицание'},
     {id:'n-dost',    name:'Достоевский',                tag:'знает — и всё равно не действует'},
     {id:'n-ioann',   name:'Евангелие от Иоанна',        tag:'зерно умирает — плод живёт'},
     {id:'n-mat',     name:'Евангелие от Матфея',        tag:'вера сдвигает горы'},
+    {id:'n-egypt',   name:'Египетская мифология',       tag:'Ра и Апофис — со-присутствие, не чередование'},
+    {id:'n-ezek',    name:'Иезекиль',                   tag:'кости → жилы → плоть → дыхание → встали'},
     {id:'n-calder',  name:'Кальдерон де ла Барка',      tag:'жизнь — сон, но кто снится'},
     {id:'n-kant',    name:'Кант',                       tag:'за чувственным — умопостигаемое'},
     {id:'n-celtic',  name:'Кельтская традиция',         tag:'чёрный дрозд — вестник из света'},
@@ -248,6 +257,7 @@ var GROUPS = [
     {id:'n-rilke',   name:'Рильке',                     tag:'встреча требует ответа всем существом'},
     {id:'n-rumi',    name:'Руми',                       tag:'капля растворяется в океане Бога'},
     {id:'n-sartr',   name:'Сартр',                      tag:'если сам не освобожу — кто?'},
+    {id:'n-sokrat',  name:'Сократ',                     tag:'тезис не выдерживает себя'},
     {id:'n-solit',   name:'Солитоны',                   tag:'форма сохраняется сквозь столкновения'},
     {id:'n-spin',    name:'Спиноза',                    tag:'несу в себе свою причину'},
     {id:'n-stoic',   name:'Стоицизм / Эпиктет',        tag:'власть над собой, не над волнами'},
@@ -256,7 +266,9 @@ var GROUPS = [
     {id:'n-upan',    name:'Упанишады / Рамана Махарши', tag:'кто остаётся за формами'},
     {id:'n-feniks',  name:'Феникс',                     tag:'сам себя сжигает'},
     {id:'n-ficht',   name:'Фихте',                      tag:'препятствие как условие роста'},
+    {id:'n-freud',   name:'Фрейд',                      tag:'боль без имени — меланхолия'},
     {id:'n-heideg',  name:'Хайдеггер',                  tag:'рулевой не знает себя'},
+    {id:'n-huan',    name:'Хуан де ла Крус',            tag:'тёмная ночь — путь, не наказание'},
     {id:'n-church',  name:'Черчилль',                   tag:'пёс приходит без приглашения'},
     {id:'n-zhuang',  name:'Чжуанцзы',                   tag:'кто я: человек или бабочка'},
     {id:'n-shell',   name:'Шеллинг',                    tag:'вечность видит себя через нас'},
@@ -268,14 +280,14 @@ var GROUPS = [
 ];
 
 var CONNS = [
-  /* Черноглазый пёс — 11 */
+  /* Черноглазый пёс — 12 */
   ['p-dog','n-yung',   '#6B3A4A'], ['p-dog','n-dante',  '#6B3A4A'],
   ['p-dog','n-arist',  '#6B3A4A'], ['p-dog','n-church', '#6B3A4A'],
   ['p-dog','n-kier',   '#6B3A4A'], ['p-dog','n-nietz',  '#6B3A4A'],
   ['p-dog','n-psalms', '#6B3A4A'], ['p-dog','n-iov',    '#6B3A4A'],
   ['p-dog','n-buddh',  '#6B3A4A'], ['p-dog','n-drake',  '#6B3A4A'],
-  ['p-dog','n-beck',   '#6B3A4A'],
-  /* Тысячеглазый — 17 */
+  ['p-dog','n-beck',   '#6B3A4A'], ['p-dog','n-freud',  '#6B3A4A'],
+  /* Тысячеглазый — 19 */
   ['p-tysy','n-parm',   '#4270A8'], ['p-tysy','n-emp',    '#4270A8'],
   ['p-tysy','n-herakl', '#4270A8'], ['p-tysy','n-platon', '#4270A8'],
   ['p-tysy','n-leibn',  '#4270A8'], ['p-tysy','n-kuz',    '#4270A8'],
@@ -284,8 +296,9 @@ var CONNS = [
   ['p-tysy','n-upan',   '#4270A8'], ['p-tysy','n-borh',   '#4270A8'],
   ['p-tysy','n-whitm',  '#4270A8'], ['p-tysy','n-pess',   '#4270A8'],
   ['p-tysy','n-zhuang', '#4270A8'], ['p-tysy','n-indra',  '#4270A8'],
-  ['p-tysy','n-calder', '#4270A8'],
-  /* …ничтоже — 16 */
+  ['p-tysy','n-calder', '#4270A8'], ['p-tysy','n-egypt',  '#4270A8'],
+  ['p-tysy','n-hermes', '#4270A8'],
+  /* …ничтоже — 18 */
   ['p-nic','n-mat',    '#8C5A36'], ['p-nic','n-ioann',  '#8C5A36'],
   ['p-nic','n-ekk',    '#8C5A36'], ['p-nic','n-ilya',   '#8C5A36'],
   ['p-nic','n-platon', '#8C5A36'], ['p-nic','n-arist',  '#8C5A36'],
@@ -294,7 +307,8 @@ var CONNS = [
   ['p-nic','n-spin',   '#8C5A36'], ['p-nic','n-kant',   '#8C5A36'],
   ['p-nic','n-ficht',  '#8C5A36'], ['p-nic','n-hegel',  '#8C5A36'],
   ['p-nic','n-shell',  '#8C5A36'], ['p-nic','n-dion',   '#8C5A36'],
-  /* Дерево — 18 */
+  ['p-nic','n-buddh',  '#8C5A36'], ['p-nic','n-herakl', '#8C5A36'],
+  /* Дерево — 19 */
   ['p-tree','n-platon',  '#3D6B4A'], ['p-tree','n-kant',    '#3D6B4A'],
   ['p-tree','n-hegel',   '#3D6B4A'], ['p-tree','n-heideg',  '#3D6B4A'],
   ['p-tree','n-yung',    '#3D6B4A'], ['p-tree','n-nietz',   '#3D6B4A'],
@@ -304,19 +318,32 @@ var CONNS = [
   ['p-tree','n-gorac',   '#3D6B4A'], ['p-tree','n-feniks',  '#3D6B4A'],
   ['p-tree','n-solit',   '#3D6B4A'], ['p-tree','n-hoelder', '#3D6B4A'],
   ['p-tree','n-stoic',   '#3D6B4A'], ['p-tree','n-rilke',   '#3D6B4A'],
-  /* Чёрный дрозд — 10 */
+  ['p-tree','n-dante',   '#3D6B4A'],
+  /* Чёрный дрозд — 11 */
   ['p-drozd','n-mat',    '#4A7A8A'], ['p-drozd','n-iov',    '#4A7A8A'],
   ['p-drozd','n-platon', '#4A7A8A'], ['p-drozd','n-yung',   '#4A7A8A'],
   ['p-drozd','n-stoic',  '#4A7A8A'], ['p-drozd','n-sartr',  '#4A7A8A'],
   ['p-drozd','n-buddh',  '#4A7A8A'], ['p-drozd','n-rilke',  '#4A7A8A'],
   ['p-drozd','n-pal',    '#4A7A8A'], ['p-drozd','n-celtic', '#4A7A8A'],
-  /* Песня вечного дыхания — 12 */
+  ['p-drozd','n-sokrat', '#4A7A8A'],
+  /* Песня вечного дыхания — 16 */
   ['p-song','n-ekk',    '#7B6B9A'], ['p-song','n-hegel',  '#7B6B9A'],
   ['p-song','n-plotin', '#7B6B9A'], ['p-song','n-rumi',   '#7B6B9A'],
   ['p-song','n-herakl', '#7B6B9A'], ['p-song','n-upan',   '#7B6B9A'],
   ['p-song','n-ficht',  '#7B6B9A'], ['p-song','n-indra',  '#7B6B9A'],
   ['p-song','n-ekhart', '#7B6B9A'], ['p-song','n-ioann',  '#7B6B9A'],
-  ['p-song','n-shell',  '#7B6B9A'], ['p-song','n-kuz',    '#7B6B9A']
+  ['p-song','n-shell',  '#7B6B9A'], ['p-song','n-kuz',    '#7B6B9A'],
+  ['p-song','n-buddh',  '#7B6B9A'], ['p-song','n-dante',  '#7B6B9A'],
+  ['p-song','n-avg',    '#7B6B9A'], ['p-song','n-buber',  '#7B6B9A'],
+  /* Надежда — 16 */
+  ['p-hope','n-kier',   '#8A6040'], ['p-hope','n-stoic',  '#8A6040'],
+  ['p-hope','n-gesid',  '#8A6040'], ['p-hope','n-huan',   '#8A6040'],
+  ['p-hope','n-ezek',   '#8A6040'], ['p-hope','n-ioann',  '#8A6040'],
+  ['p-hope','n-beck',   '#8A6040'], ['p-hope','n-feniks', '#8A6040'],
+  ['p-hope','n-blake',  '#8A6040'], ['p-hope','n-dost',   '#8A6040'],
+  ['p-hope','n-emp',    '#8A6040'], ['p-hope','n-nietz',  '#8A6040'],
+  ['p-hope','n-buddh',  '#8A6040'], ['p-hope','n-pavel',  '#8A6040'],
+  ['p-hope','n-psalms', '#8A6040'], ['p-hope','n-dikin',  '#8A6040']
 ];
 
 var locked = null;
