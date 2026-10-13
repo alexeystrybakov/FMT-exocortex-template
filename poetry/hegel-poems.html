@@ -1,0 +1,674 @@
+<title>Идея в образе</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:       #F2F0E8;
+  --surface:  #EDEAE0;
+  --border:   #D4CFBE;
+  --rule:     #C8C2AE;
+  --text:     #22283A;
+  --muted:    #5C6278;
+  --accent:   #8B6914;
+  --a-art:    #8B5E14;
+  --a-rel:    #3A6A56;
+  --a-phi:    #3050A0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:       #161A24;
+    --surface:  #1E2432;
+    --border:   #2C3448;
+    --rule:     #252D3E;
+    --text:     #E4E0D4;
+    --muted:    #8892AA;
+    --accent:   #D4AA44;
+    --a-art:    #C49A2A;
+    --a-rel:    #5AAA88;
+    --a-phi:    #6A9ACA;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:       #161A24;
+  --surface:  #1E2432;
+  --border:   #2C3448;
+  --rule:     #252D3E;
+  --text:     #E4E0D4;
+  --muted:    #8892AA;
+  --accent:   #D4AA44;
+  --a-art:    #C49A2A;
+  --a-rel:    #5AAA88;
+  --a-phi:    #6A9ACA;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lora', Georgia, serif;
+  font-size: 16.5px;
+  line-height: 1.78;
+  padding: 56px 24px 96px;
+}
+
+.page { max-width: 740px; margin: 0 auto; }
+
+/* ── header ── */
+.hdr { border-bottom: 1px solid var(--rule); padding-bottom: 36px; margin-bottom: 52px; }
+
+.hdr-eye {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--text);
+}
+
+.hdr-sub {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 14px;
+  max-width: 52ch;
+  line-height: 1.5;
+}
+
+/* ── section headers ── */
+.sec-rule {
+  width: 44px; height: 2px;
+  background: var(--accent);
+  margin-bottom: 18px; margin-top: 60px;
+}
+
+h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.65rem;
+  font-weight: 600;
+  line-height: 1.18;
+  text-wrap: balance;
+  color: var(--text);
+  margin-bottom: 22px;
+}
+
+h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-style: italic;
+  margin-top: 32px; margin-bottom: 10px;
+  color: var(--text);
+}
+
+p { margin-bottom: 16px; max-width: 64ch; }
+p:last-child { margin-bottom: 0; }
+
+/* ── definition box ── */
+.def {
+  border-left: 3px solid var(--accent);
+  padding: 14px 18px 14px 22px;
+  margin: 24px 0;
+  background: var(--surface);
+  border-radius: 0 4px 4px 0;
+}
+.def-de {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem; font-style: italic;
+  color: var(--accent); margin-bottom: 5px;
+}
+.def p { font-size: 0.93rem; color: var(--muted); }
+
+/* ── table ── */
+.tbl-wrap { overflow-x: auto; margin: 22px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.91rem; }
+thead tr { border-bottom: 2px solid var(--border); }
+th {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.76rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  text-align: left; padding: 7px 14px 7px 0;
+  font-weight: 400;
+}
+td { padding: 10px 14px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.55; }
+td:first-child {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-size: 0.98rem;
+  color: var(--accent); white-space: nowrap;
+}
+
+/* ── произвол trio ── */
+.trio {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px; margin: 22px 0;
+}
+.trio-item {
+  padding: 16px; background: var(--surface);
+  border-radius: 4px; border-top: 2px solid var(--border);
+}
+.trio-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.78rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px;
+}
+.trio-item p { font-size: 0.88rem; line-height: 1.55; }
+
+/* ── spectrum ── */
+.spectrum { margin: 36px 0 44px; }
+.spectrum-bar {
+  height: 7px; border-radius: 4px;
+  background: linear-gradient(to right, var(--a-art) 0%, #7A8898 48%, var(--a-phi) 100%);
+  margin-bottom: 10px;
+}
+.spectrum-lbls {
+  display: flex; justify-content: space-between;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.75rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+/* ── poem cards ── */
+.poem-list { display: flex; flex-direction: column; }
+
+.poem-card {
+  display: grid;
+  grid-template-columns: 3px 1fr;
+  gap: 0 18px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.poem-card:first-child { border-top: 1px solid var(--rule); }
+
+.stripe { border-radius: 2px; align-self: stretch; }
+
+.poem-head { margin-bottom: 8px; }
+.poem-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.12rem; font-weight: 600; font-style: italic;
+  color: var(--text);
+}
+.poem-meta {
+  font-size: 0.8rem; color: var(--muted); font-style: italic;
+  margin-top: 2px;
+}
+.poem-pos {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.82rem; color: var(--accent);
+  letter-spacing: 0.04em; margin-bottom: 12px;
+}
+.poem-body { font-size: 0.93rem; line-height: 1.68; max-width: 62ch; }
+.poem-body p { max-width: 62ch; margin-bottom: 10px; }
+
+.pq {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-size: 0.97rem;
+  color: var(--muted); display: block;
+  margin: 8px 0 8px 4px;
+  padding-left: 14px;
+  border-left: 2px solid var(--border);
+}
+
+.tags { margin-top: 12px; display: flex; gap: 7px; flex-wrap: wrap; }
+.tag {
+  font-size: 0.7rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  padding: 3px 9px; border-radius: 2px;
+  border: 1px solid var(--border); color: var(--muted);
+}
+.tag-art { border-color: var(--a-art); color: var(--a-art); }
+.tag-rel { border-color: var(--a-rel); color: var(--a-rel); }
+.tag-phi { border-color: var(--a-phi); color: var(--a-phi); }
+
+.proizvol-n {
+  margin-top: 10px; font-size: 0.82rem;
+  color: var(--muted); font-style: italic;
+}
+
+/* ── correction note ── */
+.correction {
+  background: var(--surface);
+  border-left: 3px solid var(--muted);
+  padding: 14px 18px; margin: 24px 0;
+  border-radius: 0 4px 4px 0;
+}
+.corr-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.76rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px;
+}
+.correction p { font-size: 0.91rem; color: var(--muted); }
+
+/* ── cycle grid ── */
+.cycle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px; margin: 24px 0;
+}
+.cycle-item {
+  background: var(--surface); border-radius: 4px;
+  padding: 16px; border-top: 2px solid var(--border);
+}
+.ci-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-weight: 600;
+  font-size: 0.95rem; color: var(--text); margin-bottom: 5px;
+}
+.ci-body { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+
+/* ── synthesis ── */
+.synth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px; margin: 24px 0;
+}
+@media (max-width: 480px) { .synth-grid { grid-template-columns: 1fr; } }
+
+.synth-item {
+  background: var(--surface); border-radius: 4px; padding: 18px;
+}
+.synth-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.76rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 10px;
+}
+.synth-item p { font-size: 0.88rem; line-height: 1.62; max-width: none; }
+
+/* ── final quote ── */
+.final-q {
+  margin-top: 44px; padding-top: 28px;
+  border-top: 1px solid var(--rule);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem; font-style: italic;
+  line-height: 1.5; color: var(--muted);
+  max-width: 52ch;
+}
+
+ul { padding-left: 1.4em; margin-bottom: 14px; }
+li { margin-bottom: 6px; font-size: 0.93rem; line-height: 1.62; }
+</style>
+
+<div class="page">
+
+<!-- ══ HEADER ══ -->
+<header class="hdr">
+  <p class="hdr-eye">Немецкий идеализм · Поэтический цикл</p>
+  <h1>Идея в образе</h1>
+  <p class="hdr-sub">Цикл «Астра Оиф» через оптику гегелевской эстетики: искусство, религия, философия и произвол</p>
+</header>
+
+
+<!-- ══ ЧАСТЬ I: РАМКА ══ -->
+<div class="sec-rule"></div>
+<h2>I. Гегелевская рамка</h2>
+
+<p>Гегель помещает искусство, религию и философию в сферу <em>Абсолютного духа</em> — три формы, в которых дух познаёт себя. Содержание у всех трёх одно (Абсолютное, Истина, Бог), различие — в медиуме.</p>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr>
+    <th>Форма</th><th>Медиум</th><th>Как дан Абсолют</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Искусство</td><td>Чувственное созерцание (Anschauung)</td><td>Снаружи, в материале</td></tr>
+    <tr><td>Религия</td><td>Представление (Vorstellung)</td><td>Внутри, в образах и нарративах</td></tr>
+    <tr><td>Философия</td><td>Понятие (Begriff)</td><td>Чистая мысль, мыслящая себя</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="def">
+  <p class="def-de">das sinnliche Scheinen der Idee</p>
+  <p>«Чувственное сияние Идеи» — основное определение Гегеля. <em>Scheinen</em> двусмысленно: и «светиться», и «казаться». Искусство — явление Идеи, но явление, не тождественное самой Идее. Отсюда его ограниченность.</p>
+</div>
+
+<h3>Три вида искусства</h3>
+<p>Гегель выстраивает исторически-диалектическую типологию по критерию <em>соответствия формы и содержания</em>:</p>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>Вид</th><th>Соотношение</th><th>Пример</th></tr></thead>
+  <tbody>
+    <tr><td>Символическое</td><td>Образ ищет Идею, не находит адекватной формы</td><td>Египетский сфинкс</td></tr>
+    <tr><td>Классическое</td><td>Идея и форма в совершенном единстве</td><td>Греческая скульптура</td></tr>
+    <tr><td>Романтическое</td><td>Идея переполняет форму, образ указывает за пределы себя</td><td>Христианская живопись, поэзия, музыка</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Конец искусства</h3>
+<p>Тезис Гегеля нередко понимают упрощённо. Он не о гибели искусства. Речь о том, что искусство потеряло для нас статус <em>высшей потребности духа</em> (höchste Bedürfnis des Geistes). Мы можем восхищаться греческой статуей, но уже не молимся ей. Рефлексия вышла на первый план — отсюда гегелевская «Эстетика» как наука об искусстве.</p>
+
+<h3>Кант, Шиллер, Шеллинг</h3>
+<p><strong>Кант</strong> подготовил почву: суждение вкуса не когнитивно и не моральное, но связывает природу и свободу. Красота — символ нравственно доброго. Гений — природа, дающая правило через художника.</p>
+<p><strong>Шиллер</strong>: <em>Spieltrieb</em> (игровое влечение) примиряет чувственное и формальное. Через красоту человек становится цельным. Эстетическое воспитание — путь к свободе.</p>
+<p><strong>Шеллинг</strong> (ранний): искусство — <em>органон философии</em>, единственное место, где субъективное и объективное совпадают. Художник творит больше, чем намеревается — Абсолют говорит через него. У Гегеля искусство ниже философии; у раннего Шеллинга — выше.</p>
+
+
+<!-- ══ ЧАСТЬ II: ПРОИЗВОЛ ══ -->
+<div class="sec-rule"></div>
+<h2>II. Произвол: в теории и в поэмах</h2>
+
+<h3>В искусстве</h3>
+<p>Гегель резко критикует <em>романтическую иронию</em> (Шлегель) как болезнь произвола: художник ставит своё «Я» выше любого содержания, всё можно разрушить, всё — игра. Это пустая субъективность: художник, освободившийся от содержания, теряет способность создавать подлинное.</p>
+<p>Различение, которое проясняет всё:</p>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th></th><th>Произвол</th><th>Подлинная свобода</th></tr></thead>
+  <tbody>
+    <tr><td>Источник</td><td>Субъективный каприз</td><td>Усвоенная объективная истина</td></tr>
+    <tr><td>Отношение к содержанию</td><td>Заменяет содержание</td><td>Выражает содержание через себя</td></tr>
+    <tr><td>Результат</td><td>Пустота, самолюбование</td><td>Необходимость в явлении свободы</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>В романтическом искусстве произвол <em>формы</em> нарастает исторически — но это симптом: содержание переросло форму, а не знак свободы художника.</p>
+
+<h3>В религии</h3>
+<p>Произвол принимает три специфических формы:</p>
+
+<div class="trio">
+  <div class="trio-item">
+    <p class="trio-label">Произвол Бога</p>
+    <p>Чудо, заповедь, откровение. С внешней точки зрения — абсолютный произвол Воли. Гегель переворачивает: в открытой религии Бог открывается как Разум, Дух, Любовь — необходимость, а не каприз.</p>
+  </div>
+  <div class="trio-item">
+    <p class="trio-label">Произвол чувства</p>
+    <p>Шлейермахер: религия = чувство абсолютной зависимости. Гегель: «если основание — чувство, то содержание неопределённо. Чувствовать можно что угодно. У собаки тоже есть чувства». Субъективный произвол делает Бога неопределённым.</p>
+  </div>
+  <div class="trio-item">
+    <p class="trio-label">Произвол положительный</p>
+    <p>Исторически случайные элементы конкретной религии — ритуалы, догматы, возникшие в конкретном контексте. Позитивность как таковая — необходимый момент воплощения Духа в историю.</p>
+  </div>
+</div>
+
+<h3>В поэмах цикла</h3>
+<p>Принципиальное наблюдение: в стихах Астра Оиф <strong>нет произвола автора</strong> — образы ощущаются необходимыми («иначе нельзя»). Произвол тематизирован как <em>содержание</em>, как то, что нужно преодолеть:</p>
+<ul>
+  <li><strong>«Дрозд»</strong> — камень как произвол: отказ от диалога с истиной</li>
+  <li><strong>«Дерево»</strong> — прямой вопрос: «Где произвол, а где свобода?» (Willkür vs. Freiheit)</li>
+  <li><strong>«Тысячеглазый»</strong> — фрагментарность без синтеза как до-произвол, состояние перед единством воли</li>
+  <li><strong>«Боль пса»</strong> — произвол отсутствует: боль приходит по необходимости, не по выбору</li>
+  <li><strong>«Ничтоже»</strong> — гора сдвигается не произвольно, а из <em>causa sui</em>: действие как необходимость внутренней причины</li>
+</ul>
+
+
+<!-- ══ ЧАСТЬ III: СЕМЬ ПОЭМ ══ -->
+<div class="sec-rule"></div>
+<h2>III. Семь поэм на шкале</h2>
+
+<p>Все поэмы цикла находятся в зоне <em>романтического искусства</em> — содержание (бесконечный дух, самопознание, единство с Абсолютом) переполняет любую конечную форму. Различие — в том, насколько далеко каждая поэма продвинулась к религии или философии.</p>
+
+<div class="spectrum">
+  <div class="spectrum-bar"></div>
+  <div class="spectrum-lbls">
+    <span>Искусство</span>
+    <span>Религия</span>
+    <span>Философия</span>
+  </div>
+</div>
+
+<div class="poem-list">
+
+  <!-- 1 -->
+  <div class="poem-card">
+    <div class="stripe" style="background:var(--a-art)"></div>
+    <div>
+      <div class="poem-head">
+        <div class="poem-title">«Боль черноглазого пса»</div>
+        <div class="poem-meta">2024–2026 · психологическая элегия</div>
+      </div>
+      <div class="poem-pos">▸ Чистое романтическое искусство (наиболее interior)</div>
+      <div class="poem-body">
+        <p>Единственная поэма, где содержание не переполняет форму, а <em>живёт</em> в ней. Образ чёрного пса — не аллегория и не концепт: он амбивалентен до конца. «Мыпёсболья» — лингвистическое слияние, которое невозможно перевести в понятие; оно само и есть событие.</p>
+        <span class="pq">«То ли пёс — символ боли бездонной моей; / то ли я — это боль черноглазого пса»</span>
+        <p>Религиозное — намеренно закрыто: псалом упомянут лишь чтобы зафиксировать отсутствие ответа; лестница от Ада до Рая — явно закрыта. «А я?» — это вопрос, на который все остальные поэмы отвечают. Здесь — нет.</p>
+      </div>
+      <div class="tags">
+        <span class="tag tag-art">Искусство</span>
+      </div>
+      <p class="proizvol-n">Произвол: отсутствует. Боль приходит по необходимости — «Не пойму, зачем ты пришёл».</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="poem-card">
+    <div class="stripe" style="background:var(--a-art)"></div>
+    <div>
+      <div class="poem-head">
+        <div class="poem-title">«Надежда»</div>
+        <div class="poem-meta">2024 · философская поэма-аллегория</div>
+      </div>
+      <div class="poem-pos">▸ Романтическое искусство, наиболее цельная аллегория цикла</div>
+      <div class="poem-body">
+        <p>Аллегория надежды как персоны, дом как душа, скелет → платье → свет → воскресение — образ <em>адекватен</em> содержанию и выдержан на протяжении всей поэмы. По точности воспроизведения Иезекиля 37 (кости → жилы → плоть → дыхание → встала) это наиболее «контейнерная» поэма цикла.</p>
+        <span class="pq">«Напоится влагой скелет. / Из лохмотьев платье соткётся, / Загорится в её теле свет»</span>
+        <p>Но финал — «с надеждой едины» — переполняет аллегорию: это буддийская адвайта, агапе Павла, Эмпедоклова Любовь одновременно. Содержание давит на форму изнутри.</p>
+      </div>
+      <div class="tags">
+        <span class="tag tag-art">Искусство</span>
+        <span class="tag tag-rel">Религия (умеренно)</span>
+      </div>
+      <p class="proizvol-n">Произвол: листок без надежды убивает её произвольно — произвол как саморазрушение.</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="poem-card">
+    <div class="stripe" style="background:var(--a-rel)"></div>
+    <div>
+      <div class="poem-head">
+        <div class="poem-title">«Чёрный дрозд и собирательница ягод на болоте»</div>
+        <div class="poem-meta">2025 · философская притча в форме лирической поэмы</div>
+      </div>
+      <div class="poem-pos">▸ Романтическое искусство + религиозный жанр (Vorstellung)</div>
+      <div class="poem-body">
+        <p>Единственная поэма цикла, где сам жанр — религиозный. <em>Притча</em> есть форма Vorstellung в чистом виде: истина в нарративе, требующем интерпретации. Дрозд — одновременно Сократ (сократовский элегант против фатализма), евангельский посланник («камнями побивающий посланных»), бодхисаттва («всякий раз я терпелив»).</p>
+        <span class="pq">«И всякий раз меня ты гонишь, / И всякий раз я терпелив. / Взлетел он вмиг, вернётся вновь»</span>
+        <p>Финал открыт — как и положено притче: зерно брошено, почва не готова. Форма удерживает философское содержание как сосуд: истина знает себя, но — в образе, а не в понятии.</p>
+      </div>
+      <div class="tags">
+        <span class="tag tag-art">Искусство</span>
+        <span class="tag tag-rel">Религия (жанр)</span>
+      </div>
+      <p class="proizvol-n">Произвол: камень — произвол как отказ от истины. Философски самое острое воплощение темы в цикле.</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="poem-card">
+    <div class="stripe" style="background:#6A7A9A"></div>
+    <div>
+      <div class="poem-head">
+        <div class="poem-title">«Тысячеглазый»</div>
+        <div class="poem-meta">2026 · философско-лирическая поэма-апория</div>
+      </div>
+      <div class="poem-pos">▸ Романтическое → порог философии (bestimmte Negation)</div>
+      <div class="poem-body">
+        <p>Образ Аргуса перед зеркалом совершенно адекватен содержанию — тысяча воплощений нарратора = тысяча глаз. Он не тесен и не давит; он <em>и есть</em> мысль. Поэма движется от множественности через апорию явлений к диалогу — и к эпифании.</p>
+        <span class="pq">«Единая основа — в мышленьи проявилась» ·  «Не об одном и том же ли они?»</span>
+        <p>«Единая основа — в мышленьи» — тождество бытия и мышления по Гегелю. «Не об одном и том же ли они?» — это <em>bestimmte Negation</em> (определённое отрицание): точная фиксация противоречия, указывающая направление к синтезу, но синтеза ещё не достигающая. Аналог — ранние диалоги Платона: продуктивная апория, не тупик.</p>
+      </div>
+      <div class="tags">
+        <span class="tag tag-art">Искусство</span>
+        <span class="tag tag-phi">Философия (порог)</span>
+      </div>
+      <p class="proizvol-n">Произвол: фрагментарность без синтеза — до-произвол, состояние перед единством воли.</p>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="poem-card">
+    <div class="stripe" style="background:#5A7898"></div>
+    <div>
+      <div class="poem-head">
+        <div class="poem-title">«Песня вечного дыхания»</div>
+        <div class="poem-meta">2025 · философский гимн (hymnus philosophicus)</div>
+      </div>
+      <div class="poem-pos">▸ Романтическое → граница философии, форма = содержание</div>
+      <div class="poem-body">
+        <p>Форма совпадает с содержанием: кольцевое стихотворение = водный круговорот = кругооборот духа. Это можно принять за классическое единство — но содержание всё равно его переполняет.</p>
+        <span class="pq">«Процесс развития к "для него" из "в нём"» · «К духу, что живёт собой»</span>
+        <p>Первое — прямая цитата гегелевской схемы An sich → Für sich. Второе — понятие самоопределяющегося Духа, которое образ воды лишь <em>приближает</em>, не содержит. Поэма сознаёт, что указывает за пределы себя. Это сигнал романтического искусства. Религиозный регистр высокий: гимн к космическому принципу — в традиции орфических гимнов и Прокла.</p>
+      </div>
+      <div class="tags">
+        <span class="tag tag-art">Искусство</span>
+        <span class="tag tag-rel">Религия (гимн)</span>
+        <span class="tag tag-phi">Философия (граница)</span>
+      </div>
+      <p class="proizvol-n">Произвол: отсутствует. Водный цикл есть необходимость, не выбор.</p>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="poem-card">
+    <div class="stripe" style="background:var(--a-phi)"></div>
+    <div>
+      <div class="poem-head">
+        <div class="poem-title">«…и҆ ничто́же невозмо́жно бꙋ́детъ ва́мъ»</div>
+        <div class="poem-meta">2026 · философско-лирическая поэма-аргумент</div>
+      </div>
+      <div class="poem-pos">▸ Романтическое → философия (наиболее дискурсивная)</div>
+      <div class="poem-body">
+        <p>Образы (свеча, апельсин, гора) работают как посылки аргумента, а не как украшение: убери образ — рухнет вывод. Единственная поэма цикла с эксплицитной трёхшаговой аргументацией: нигилизм → имманентное вечное в конечном → практический вывод.</p>
+        <span class="pq">«Себя он отрицающий, с собою же единый» — Aufhebung</span>
+        <span class="pq">«В сущности своей несу себя причину» — causa sui (Спиноза)</span>
+        <span class="pq">«Вечность через нас / Сама в себя вгляделась» — Шеллинг / Экхарт / Гегель</span>
+        <p>Религиозный регистр — реальный (название из церковнославянского, «Глас Безмолвный», «во мраке кельи», исихазм Паламы), но всегда философски медиирован.</p>
+      </div>
+      <div class="tags">
+        <span class="tag tag-art">Искусство</span>
+        <span class="tag tag-rel">Религия (язык)</span>
+        <span class="tag tag-phi">Философия (структура)</span>
+      </div>
+      <p class="proizvol-n">Произвол: гора сдвигается не произвольно, а из <em>causa sui</em> — действие как необходимость внутренней причины.</p>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="poem-card">
+    <div class="stripe" style="background: linear-gradient(to bottom, var(--a-art), var(--a-rel), var(--a-phi))"></div>
+    <div>
+      <div class="poem-head">
+        <div class="poem-title">«Дерево»</div>
+        <div class="poem-meta">2025–2026 · философско-лирическая поэма воспитания (Bildungsgedicht)</div>
+      </div>
+      <div class="poem-pos">▸ Пересечение искусства, религии и философии</div>
+      <div class="poem-body">
+        <p>Единственная поэма цикла, где все три регистра реально пересекаются — не соседствуют. <strong>Искусство:</strong> Bildungsgedicht с нарративной дугой от клетки до полёта. <strong>Религия:</strong> unio mystica в традиции Экхарта и Паламы. <strong>Философия:</strong> точная формула Aufhebung и вопрос о Willkür vs. Freiheit.</p>
+        <span class="pq">«Я сам себя же отрицаю, / Чтобы себя преодолеть» — Aufhebung</span>
+        <span class="pq">«Не дерево в тумане, а в дереве туман» — инверсия явления и сущности</span>
+        <span class="pq">«Безмолвный Голос / Я! / Живой!» — unio mystica (Экхарт)</span>
+        <span class="pq">«Где произвол, а где свобода?» — Willkür vs. Freiheit</span>
+        <p>Постскриптум превращает поэму из исповеди в передачу: «К тебе, мой дорогой читатель, тяну я мыслеветви». Единственная поэма, где путь пройден от начала до конца.</p>
+      </div>
+      <div class="tags">
+        <span class="tag tag-art">Искусство</span>
+        <span class="tag tag-rel">Религия (unio mystica)</span>
+        <span class="tag tag-phi">Философия (Aufhebung)</span>
+      </div>
+      <p class="proizvol-n">Произвол: сам предмет поэмы. Клетка-привычка = Willkür; Безмолвный Голос = Freiheit как самоопределение из causa sui.</p>
+    </div>
+  </div>
+
+</div><!-- /poem-list -->
+
+
+<!-- ══ ЧАСТЬ IV: АРХИТЕКТУРА ЦИКЛА ══ -->
+<div class="sec-rule"></div>
+<h2>IV. Архитектура цикла</h2>
+
+<p>Цикл не выстраивает линейного прогресса от простого к сложному. Это <em>грани одного опыта</em>, рассмотренные с разных сторон — как гегелевский Абсолютный дух, который узнаёт себя не в одном моменте, а в обходе всех своих форм.</p>
+
+<div class="cycle-grid">
+  <div class="cycle-item">
+    <p class="ci-title">«Боль пса»</p>
+    <p class="ci-body">Нулевая точка. Чистое страдание без синтеза. Вопрос «а я?», на который все остальные отвечают.</p>
+  </div>
+  <div class="cycle-item">
+    <p class="ci-title">«Надежда»</p>
+    <p class="ci-body">Первый ответ. Надежда возвращается — но как персона, не как самопознание. Цикл начат.</p>
+  </div>
+  <div class="cycle-item">
+    <p class="ci-title">«Дрозд»</p>
+    <p class="ci-body">Зеркальная инверсия «Дерева». Та же рука протянута — камень вместо принятия. Что предшествует пробуждению.</p>
+  </div>
+  <div class="cycle-item">
+    <p class="ci-title">«Тысячеглазый»</p>
+    <p class="ci-body">Апория перед синтезом. Правильный вопрос наконец поставлен. Порог, не тупик.</p>
+  </div>
+  <div class="cycle-item">
+    <p class="ci-title">«Ничтоже»</p>
+    <p class="ci-body">Онтологический тезис: конечное несёт вечное в себе. Единственный аргумент против нигилизма.</p>
+  </div>
+  <div class="cycle-item">
+    <p class="ci-title">«Песня»</p>
+    <p class="ci-body">Paradiso цикла. Созерцание «вне времени». Написана раньше — но по смыслу стоит вне хронологии.</p>
+  </div>
+  <div class="cycle-item">
+    <p class="ci-title">«Дерево»</p>
+    <p class="ci-body">Синтез в действии. Единственная поэма, где путь пройден от начала до конца. Bildung завершён.</p>
+  </div>
+</div>
+
+<h3>Произвол как сквозная нить</h3>
+<p>Цикл прослеживает преодоление произвола на нескольких уровнях одновременно:</p>
+<ul>
+  <li><strong>Психологический</strong> — произвол как неуправляемое страдание («Боль пса» → «Надежда»)</li>
+  <li><strong>Социально-моральный</strong> — произвол как отказ от истины («Дрозд»)</li>
+  <li><strong>Философский</strong> — Willkür → Freiheit через самопознание («Дерево»)</li>
+  <li><strong>Космологический</strong> — произвол растворяется в имманентности вечного в конечном («Ничтоже», «Песня»)</li>
+</ul>
+
+<h3>Поправки, внесённые в ходе анализа</h3>
+
+<div class="correction">
+  <p class="corr-label">Исправлено</p>
+  <p>Первый анализ трёх поэм («Тысячеглазый», «Ничтоже», «Дерево») ошибочно наложил гегелевскую триаду символическое → классическое → романтическое на цикл <em>до чтения текстов</em>. «Тысячеглазый» — не символическое искусство: образ Аргуса философски адекватен и образует bestimmte Negation. «Ничтоже» — не классическое: образы суть посылки аргумента. Оба отнесены к романтическому полюсу после полного прочтения.</p>
+  <p style="margin-top:8px">«Надежда» первоначально характеризовалась как «классическое с романтическими напряжениями» — уточнено: <em>романтическое, наиболее внутренне цельное по аллегории</em>, но содержание (бесконечный дух, воскресение, агапе) уже не вмещается в классическую форму.</p>
+</div>
+
+
+<!-- ══ ЧАСТЬ V: ИТОГ ══ -->
+<div class="sec-rule"></div>
+<h2>V. Итог</h2>
+
+<div class="synth-grid">
+  <div class="synth-item">
+    <p class="synth-label">Позиция на шкале</p>
+    <p>Все семь поэм — в зоне романтического искусства: содержание переполняет форму, образ указывает за пределы себя. Ни одна не остаётся в символическом («образ ищет Идею») или классическом («совершенное единство») регистре.</p>
+  </div>
+  <div class="synth-item">
+    <p class="synth-label">Произвол</p>
+    <p>Произвол автора — отсутствует. Произвол тематизирован как содержание, как то, что нужно преодолеть. Цикл в целом прослеживает движение от Willkür к Freiheit на четырёх уровнях.</p>
+  </div>
+  <div class="synth-item">
+    <p class="synth-label">Религиозный регистр</p>
+    <p>Присутствует у всех, кроме «Тысячеглазого» и «Боли пса». Наиболее чистый Vorstellung — «Дрозд» (притча как жанр). В остальных религиозное всегда философски медиировано: это религия, знающая о себе.</p>
+  </div>
+  <div class="synth-item">
+    <p class="synth-label">Конец искусства</p>
+    <p>Поэмы содержат собственный теоретический аппарат (разделы «Параллели»). Это искусство, которое стало саморефлексивным — состояние, которое Гегель называл «концом искусства» как высшей потребности духа. И всё же оно остаётся подлинно творческим.</p>
+  </div>
+</div>
+
+<p class="final-q">«Безмолвный Голос / Я! / Живой!» — момент, когда искусство, религия и философия перестают быть тремя путями и становятся одним переживанием.</p>
+
+</div><!-- /page -->
