@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Глубже и выше звёзд</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;1,400&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single star trail running down the page; Hegel's stages are bands on the left, each part is a star on the trail. */
+:root {
+  --bg: #eef1f6;
+  --fg: #1b2233;
+  --muted: #5a6478;
+  --line: #c6cede;
+  --star: #b8741c;
+  --star-soft: #f3e3c8;
+  --plan: #8a93a6;
+  --display: "Alegreya", "PT Serif", Georgia, serif;
+  --body: "Golos Text", "PT Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1422; --fg: #e5e8f0; --muted: #9aa3b6; --line: #2b3449;
+    --star: #e8b14c; --star-soft: #2c2616; --plan: #6f7890; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1422; --fg: #e5e8f0; --muted: #9aa3b6; --line: #2b3449;
+  --star: #e8b14c; --star-soft: #2c2616; --plan: #6f7890; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 15px/1.5 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 48px;
+}
+.page { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 {
+  font: 700 2.1rem/1.1 var(--display); margin: 0; text-wrap: balance;
+}
+header p { margin: 6px 0 0; color: var(--muted); }
+
+.band { display: grid; grid-template-columns: 8.5rem 1fr; gap: 0 18px; }
+.band-label {
+  border-right: 1px solid var(--line); padding: 4px 14px 0 0; text-align: right;
+}
+.band-label b {
+  display: block; font: 600 0.78rem/1.2 var(--body); letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.band-label small { color: var(--muted); font-size: 0.8rem; }
+
+.trail { list-style: none; margin: 0; padding: 0 0 0 26px; position: relative; display: grid; gap: 18px; }
+.trail::before {
+  content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px;
+  border-left: 2px dotted var(--line);
+}
+.star { position: relative; }
+.star::before {
+  content: ""; position: absolute; left: -25px; top: 5px; width: 14px; height: 14px;
+  background: var(--star);
+  clip-path: polygon(50% 0, 61% 38%, 100% 50%, 61% 62%, 50% 100%, 39% 62%, 0 50%, 39% 38%);
+}
+.star.pending::before { background: var(--plan); }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.num { font: 500 0.95rem var(--display); color: var(--star); min-width: 2.2rem; font-variant-numeric: tabular-nums; }
+.star h2 { font: 700 1.25rem/1.2 var(--display); margin: 0; }
+.stage {
+  font-size: 0.78rem; font-weight: 500; padding: 1px 8px; border-radius: 3px;
+  background: var(--star-soft); color: var(--fg);
+}
+.note { font-size: 0.75rem; color: var(--muted); }
+.star p { margin: 3px 0 0; max-width: 62ch; }
+.star q {
+  display: block; margin-top: 4px; font: italic 400 1.05rem/1.4 var(--display); color: var(--muted);
+  quotes: none;
+}
+.turn {
+  margin-left: -26px; padding: 8px 0 8px 26px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+.turn b { font-family: var(--display); font-size: 1.05rem; }
+
+.ahead { border-top: 1px solid var(--line); padding-top: 14px; color: var(--muted); font-size: 0.9rem; }
+.ahead b { color: var(--fg); font-weight: 500; }
+
+@media (max-width: 560px) {
+  .band { grid-template-columns: 1fr; gap: 10px; }
+  .band-label { border-right: 0; border-bottom: 1px solid var(--line); text-align: left; padding: 0 0 6px; }
+  .band-label b { display: inline; margin-right: 8px; }
+  header h1 { font-size: 1.7rem; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Глубже и выше звёзд</h1>
+    <p>Персонажи частей I–X и ступени «Феноменологии духа» Гегеля, которые они воплощают.</p>
+  </header>
+
+  <section class="band">
+    <div class="band-label"><b>Сознание</b><small>I–III</small></div>
+    <ol class="trail">
+      <li class="turn"><b>Блок 1. Звёздное Дитя</b></li>
+      <li class="star">
+        <div class="head"><span class="num">I</span><h2>Звёздное Дитя</h2><span class="stage">чувственная достоверность</span></div>
+        <p>Звезда в коконе: сначала заявляет о себе, потом спрашивает о других и прорывается наружу.</p>
+        <q>«Я есть!» … «Кто есть ещё?»</q>
+      </li>
+      <li class="star">
+        <div class="head"><span class="num">II</span><h2>Тау Кита</h2><span class="stage">первое другое самосознание</span></div>
+        <p>Первый, кто ответил. Старшая звезда, когда-то тоже Дитя: признаёт, но не как равного, и учит, что выше ведёт взаимное признание.</p>
+        <q>«Я тоже есть!»</q>
+      </li>
+      <li class="star">
+        <div class="head"><span class="num">III</span><h2>Не отвечающая звезда</h2></div>
+        <p>Другой может и не ответить.</p>
+        <q>Ответа / Снова / Нет.</q>
+      </li>
+    </ol>
+  </section>
+
+  <section class="band">
+    <div class="band-label"><b>Самосознание</b><small>IV–X</small></div>
+    <ol class="trail">
+      <li class="star">
+        <div class="head"><span class="num">IV</span><h2>Фомальгаут</h2><span class="stage">желание</span></div>
+        <p>Видит в другом добычу.</p>
+        <q>Не „кто ты?" — „что урвать с тебя?"</q>
+      </li>
+      <li class="star">
+        <div class="head"><span class="num">V</span><h2>Ригель</h2><span class="stage">господство и рабство</span></div>
+        <p>Требует признания силой. В конце части Дитя даёт себе имя.</p>
+        <q>Я — Господин! А ты — Мой раб.</q>
+      </li>
+      <li class="turn"><b>Блок 2. Фаэгнон</b> · «Отныне нарекаюсь: / Фаэгнон»</li>
+      <li class="star">
+        <div class="head"><span class="num">VI</span><h2>Фаэгнон и Фаэтон</h2><span class="stage">для-себя, воспоминание</span><span class="note">Фаэтон: контрпример</span></div>
+        <p>Фаэгнон узнаёт огонь, который всегда был в нём, и светит сам. Фаэтон взял огонь по праву рождения, без труда, и погиб.</p>
+        <q>Взял по праву рождения. / Огонь права не знает.</q>
+      </li>
+      <li class="star">
+        <div class="head"><span class="num">VII</span><h2>Аутар</h2><span class="stage">стоицизм и скептицизм</span><span class="note">имя звучит в IX</span></div>
+        <p>Огонь добыт трудом, но заперт в себе. В конце сомнение доходит до его собственного принципа.</p>
+        <q>— Слышу, — сказал он. И на этом повис.</q>
+      </li>
+      <li class="star">
+        <div class="head"><span class="num">VIII</span><h2>Физоэн, то есть Зоа и Фио</h2><span class="stage">взаимное признание</span></div>
+        <p>Двое стали одним светом и остались собой. Зовут Фаэгнона в созвездие, он отказывается: сначала должен сам достичь предела.</p>
+        <q>И мы. Воистину. Иоэ.</q>
+      </li>
+      <li class="star">
+        <div class="head"><span class="num">IX</span><h2>Аутар, вторая встреча</h2><span class="stage">несчастное сознание</span><span class="note">выход к Разуму: прочтение Claude</span></div>
+        <p>Раскол внутри. Принимает свои осколки как себя и видит путь к целому.</p>
+        <q>Я — в осколках, в каждом; и были все они во мне.</q>
+      </li>
+      <li class="star pending">
+        <div class="head"><span class="num">X</span><h2>Фридхол, в рассказе Анолара</h2><span class="stage">несчастное сознание</span><span class="note">пишется</span></div>
+        <p>Аутар теперь Анолар и рассказывает о Фридхоле: тот не вышел, прячется в памяти о целом, и даже имя у него отпало.</p>
+        <q>Мне память стережёт покои, ведь только там был целым я</q>
+      </li>
+    </ol>
+  </section>
+
+  <p class="ahead">Дальше по плану: <b>XI</b> поклонник Мафусаила, вера · <b>XII</b> Агнея, прекрасная душа · <b>XIII</b> Анойлет, первое узнавание равного · <b>Созвездие</b>, нравственность · <b>Финал</b>, абсолютное знание.</p>
+</div>
+</body>
+</html>
